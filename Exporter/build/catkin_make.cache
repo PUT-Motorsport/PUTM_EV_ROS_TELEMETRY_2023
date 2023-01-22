@@ -1,0 +1,2 @@
+ROS_Telemetry
+-DCATKIN_DEVEL_PREFIX=/home/tel/Exporter/devel -DCMAKE_INSTALL_PREFIX=/home/tel/Exporter/install -G Unix Makefiles

@@ -1,0 +1,14 @@
+cmake_minimum_required(VERSION 3.0.0)
+project(Telemetry_Exporter VERSION 0.1.0)
+
+include(CTest)
+enable_testing()
+
+add_subdirectory(Prometheus)
+add_subdirectory(ROS)
+
+add_executable(Telemetry_Exporter src/main.cpp)
+
+set(CPACK_PROJECT_NAME ${PROJECT_NAME})
+set(CPACK_PROJECT_VERSION ${PROJECT_VERSION})
+include(CPack)
