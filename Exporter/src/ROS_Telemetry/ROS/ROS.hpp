@@ -1,5 +1,6 @@
 #pragma once
 #include <ros/ros.h>
-#include "std_msgs/String.h"
+#include "ROS_Telemetry/Apps_main.h"
 
-void Apps_Callback(const std_msgs::String::ConstPtr& msg);
+
+void Apps_Callback(const ROS_Telemetry::Apps_main::ConstPtr& msg);

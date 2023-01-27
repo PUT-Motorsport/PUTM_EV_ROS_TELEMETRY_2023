@@ -1,6 +1,6 @@
 # generated from genmsg/cmake/pkg-genmsg.context.in
 
-messages_str = ""
+messages_str = "/home/tel/Exporter/src/ROS_Telemetry/msg/Apps_main.msg"
 services_str = ""
 pkg_name = "ROS_Telemetry"
 dependencies_str = "std_msgs"

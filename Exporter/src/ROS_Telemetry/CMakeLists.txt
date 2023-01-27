@@ -49,7 +49,7 @@ find_package(catkin REQUIRED COMPONENTS
 ##   * uncomment the generate_messages entry below
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
-add_message_files(FILES ${msg_files_namesonly})
+add_message_files(FILES Apps_main.msg)
 
 ## Generate services in the 'srv' folder
 # add_service_files(

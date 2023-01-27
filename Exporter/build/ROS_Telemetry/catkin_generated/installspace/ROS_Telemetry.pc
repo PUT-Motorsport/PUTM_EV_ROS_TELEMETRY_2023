@@ -3,6 +3,6 @@ prefix=/home/tel/Exporter/install
 Name: ROS_Telemetry
 Description: Description of ROS_Telemetry
 Version: 0.0.0
-Cflags: 
+Cflags: -I${prefix}/include
 Libs: -L${prefix}/lib 
 Requires: roscpp std_msgs message_runtime
