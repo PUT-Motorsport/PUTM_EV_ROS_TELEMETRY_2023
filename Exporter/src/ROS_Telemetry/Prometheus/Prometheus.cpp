@@ -2,6 +2,19 @@
 
 using namespace Data;
 
+
+template<typename T, typename D>
+void update(T objects, D data)
+{
+    int i=0;
+    for(Gauge g : objects)
+    {
+        g.Set(data[i]);
+        i++;
+    } 
+}
+
+
 /*
 void Apps::Update_Metrics() 
 {

@@ -37,13 +37,13 @@ class Counters{
 
 class Apps{
     private:
-     Family<Gauge>& APPS = {BuildGauge()
+     Family<Gauge> &APPS = {BuildGauge()
                         .Name("Apps")
                         .Help("--")
                         .Register(*registry_prometheus)};
 
-    Gauge& Pedal_Position = {APPS.Add({{"Apps","Pedal Position"}})};
-    Gauge& Difference     = {APPS.Add({{"Apps",    "Difference"}})};
+    Gauge &Pedal_Position = {APPS.Add({{"Apps","Pedal Position"}})};
+    Gauge &Difference     = {APPS.Add({{"Apps",    "Difference"}})};
 
     enum states
     {

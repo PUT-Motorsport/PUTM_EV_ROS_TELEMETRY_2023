@@ -1,7 +1,10 @@
 #include <iostream>
 #include <ros/ros.h>
 #include "../Prometheus/Prometheus.hpp"
+#include "../Prometheus/Communication.hpp"
 #include "../ROS/ROS.hpp"
+
+Communication::variable_labels labels;
 
 int main(int argc, char *argv[])
 {
