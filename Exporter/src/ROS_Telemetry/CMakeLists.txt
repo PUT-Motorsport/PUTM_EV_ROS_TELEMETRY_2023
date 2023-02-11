@@ -3,8 +3,13 @@ project(ROS_Telemetry)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 
-add_compile_options(-std=c++17)
-set(CMAKE_CXX_STANDARD 17)
+add_compile_options(-std=c++2a)
+add_compile_options(-DCMAKE_BUILD_TYPE=debug)
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -15,6 +20,8 @@ find_package(catkin REQUIRED COMPONENTS
   std_msgs
   message_generation
 )
+
+find_package(Boost REQUIRED COMPONENTS system)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -130,7 +137,7 @@ add_subdirectory(ROS)
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
- add_executable(${PROJECT_NAME}_node src/ROS_Telemetry_node.cpp ROS/ROS.cpp Prometheus/Prometheus.cpp Prometheus/Communication.cpp)
+ add_executable(${PROJECT_NAME}_node src/ROS_Telemetry_node.cpp ROS/ROS.cpp Prometheus/Communication.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -144,8 +151,7 @@ add_subdirectory(ROS)
 
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME}_node PRIVATE ${catkin_LIBRARIES} "/prometheus-cpp/lib/libprometheus-cpp-pull.so.1.1.0")
-
-#############
+target_link_libraries(${PROJECT_NAME}_node PRIVATE ${catkin_LIBRARIES} "/prometheus-cpp/lib/libprometheus-cpp-core.so.1.1")
 ## Install ##
 #############
 

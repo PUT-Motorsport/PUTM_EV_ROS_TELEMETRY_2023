@@ -1,18 +1,14 @@
 #include "Prometheus.hpp"
 
-using namespace Data;
-
-
-template<typename T, typename D>
-void update(T objects, D data)
-{
-    int i=0;
-    for(Gauge g : objects)
-    {
-        g.Set(data[i]);
-        i++;
-    } 
-}
+/*
+Data::Bms_Lv *lv = new Data::Bms_Lv();
+Data::Apps *apps = new Data::Apps();
+Data::Bms_Hv *hv = new Data::Bms_Hv();
+Data::AQ_Card *aq = new Data::AQ_Card();
+Data::Traction_Control *tc = new Data::Traction_Control();
+Data::Temperatures *temps = new Data::Temperatures();
+Data::Time *times = new Data::Time();
+*/
 
 
 /*

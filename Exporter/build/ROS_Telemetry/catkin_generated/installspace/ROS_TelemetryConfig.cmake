@@ -67,14 +67,14 @@ set(ROS_Telemetry_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(ROS_Telemetry_SOURCE_PREFIX /home/tel/Exporter/src/ROS_Telemetry)
-  set(ROS_Telemetry_DEVEL_PREFIX /home/tel/Exporter/devel)
+  set(ROS_Telemetry_SOURCE_PREFIX /home/putm/Exporter/src/ROS_Telemetry)
+  set(ROS_Telemetry_DEVEL_PREFIX /home/putm/Exporter/devel)
   set(ROS_Telemetry_INSTALL_PREFIX "")
   set(ROS_Telemetry_PREFIX ${ROS_Telemetry_DEVEL_PREFIX})
 else()
   set(ROS_Telemetry_SOURCE_PREFIX "")
   set(ROS_Telemetry_DEVEL_PREFIX "")
-  set(ROS_Telemetry_INSTALL_PREFIX /home/tel/Exporter/install)
+  set(ROS_Telemetry_INSTALL_PREFIX /home/putm/Exporter/install)
   set(ROS_Telemetry_PREFIX ${ROS_Telemetry_INSTALL_PREFIX})
 endif()
 
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/tel/Exporter/install/lib;/home/tel/Exporter/devel/lib;/opt/ros/noetic/lib)
+    foreach(path /home/putm/Exporter/install/lib;/home/putm/Exporter/devel/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

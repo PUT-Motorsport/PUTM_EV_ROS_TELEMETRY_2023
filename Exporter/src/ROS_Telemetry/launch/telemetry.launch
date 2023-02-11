@@ -1,0 +1,3 @@
+<launch>
+  <node name="ROS_Telemetry_node" pkg="ROS_Telemetry" type="ROS_Telemetry_node" output="screen"/>
+</launch>

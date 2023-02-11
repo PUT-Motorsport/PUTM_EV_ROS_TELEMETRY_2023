@@ -1,4 +1,4 @@
-prefix=/home/tel/Exporter/install
+prefix=/home/putm/Exporter/install
 
 Name: ROS_Telemetry
 Description: Description of ROS_Telemetry

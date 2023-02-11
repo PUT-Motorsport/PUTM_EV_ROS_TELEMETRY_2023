@@ -1,9 +1,22 @@
 #pragma once
+
+#include<algorithm>
+#include <array>
+#include <chrono>
+#include <cstdlib>
+#include <memory>
+#include <string>
+#include <thread>
+#include <iostream>
+#include <vector>
+#include <iterator>
+
 #include "prometheus/client_metric.h"
 #include "prometheus/counter.h"
 #include "prometheus/exposer.h"
 #include "prometheus/family.h"
 #include "prometheus/registry.h"
+#include "prometheus/wektor.h"
 
 using namespace prometheus;
 extern std::shared_ptr<prometheus::Registry> registry_prometheus;
@@ -34,18 +47,20 @@ class Counters{
         counter->Increment();
     }
 };
-
 class Apps{
-    private:
-     Family<Gauge> &APPS = {BuildGauge()
-                        .Name("Apps")
+    public:
+
+    Family<Gauge> &fam = {BuildGauge()
+                        .Name("APPS")
                         .Help("--")
                         .Register(*registry_prometheus)};
 
-    Gauge &Pedal_Position = {APPS.Add({{"Apps","Pedal Position"}})};
-    Gauge &Difference     = {APPS.Add({{"Apps",    "Difference"}})};
+    //Order here matters. Gauges should be defined in opposite order, than in msg file.
+    Gauge &Counter        = {fam.Add({{"Apps",       "Counter"}})};
+    Gauge &Difference     = {fam.Add({{"Apps",    "Difference"}})};
+    Gauge &Pedal_Position = {fam.Add({{"Apps","Pedal Position"}})};
 
-    enum states
+    enum state
     {
         NORMAL_OPERATION,
         POWER_UP,
@@ -64,23 +79,20 @@ class Apps{
             "Left sensor out of range - upper bound",
             "Right sensor out of range - lower bound",
             "Right sensor out of range - upper bound"};
-
-    public:
-
-    void Update_Metrics();
 };
 
 class Bms_Lv{
-    private:
-    Family<Gauge>& BMS_LV = {BuildGauge()
+    public:
+
+    Family<Gauge> &fam = {BuildGauge()
                         .Name("BMS_LV")
                         .Help("--")
                         .Register(*registry_prometheus)};
 
-    Gauge& Voltage     = {BMS_LV.Add({{"BMS_LV",    "Voltage"}})};
-    Gauge& SoC         = {BMS_LV.Add({{"BMS_LV",        "SoC"}})};
-    Gauge& Temperature = {BMS_LV.Add({{"BMS_LV","Temperature"}})};
-    Gauge& Current     = {BMS_LV.Add({{"BMS_LV",    "Current"}})};
+    Gauge& Voltage     = {fam.Add({{"BMS_LV",    "Voltage"}})};
+    Gauge& SoC         = {fam.Add({{"BMS_LV",        "SoC"}})};
+    Gauge& Temperature = {fam.Add({{"BMS_LV","Temperature"}})};
+    Gauge& Current     = {fam.Add({{"BMS_LV",    "Current"}})};
 
      enum states
     {
@@ -105,10 +117,6 @@ class Bms_Lv{
             "High Temperature",
             "High Current",
             "Sleeping"};
-
-    public:
-
-    void Update_Metrics();
 };
 
 class Bms_Hv{
@@ -346,11 +354,22 @@ class Time{
     void Set_Skidpad_Ignore_Boundaries(float upper, float lower){
         SkidPad_lower = lower;
         SkidPad_upper = upper;}
-
-    void Update_Time();
 };
 
 }
 
 template<typename T>
 void Check_SC(T *SC, uint8_t new_s);
+
+template<typename T>
+void Update(T object, std::vector<double> Data)
+{
+    int i=0;
+    for(auto &m : object->fam.metrics_)
+    {
+        m.second->Set(Data[i]);
+        i++;
+    }
+    std::cout << "End" << std::endl;
+}
+ 
