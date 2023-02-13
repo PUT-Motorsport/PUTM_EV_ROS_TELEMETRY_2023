@@ -16,10 +16,12 @@
 #include "prometheus/exposer.h"
 #include "prometheus/family.h"
 #include "prometheus/registry.h"
-#include "prometheus/wektor.h"
+
+#include "../Loki/Loki.hpp"
 
 using namespace prometheus;
 extern std::shared_ptr<prometheus::Registry> registry_prometheus;
+extern Tlogs logger;
 
 namespace Data
 {
@@ -50,6 +52,8 @@ class Counters{
 class Apps{
     public:
 
+    std::string device_name = "Apps";
+
     Family<Gauge> &fam = {BuildGauge()
                         .Name("APPS")
                         .Help("--")
@@ -59,6 +63,8 @@ class Apps{
     Gauge &Counter        = {fam.Add({{"Apps",       "Counter"}})};
     Gauge &Difference     = {fam.Add({{"Apps",    "Difference"}})};
     Gauge &Pedal_Position = {fam.Add({{"Apps","Pedal Position"}})};
+
+    //AgentJson &device_logger     = {logger.registry_loki.Add({{"Source", "PUTM_Telemetry"}, {"Device",device_name}})};
 
     enum state
     {
@@ -71,14 +77,20 @@ class Apps{
         RIGHT_SENSOR_OUT_OF_RANGE_UPPER_BOUND
     };
 
-    std::vector<std::string> apps_string_states {
+    std::vector<std::string> ok_states {
             "Normal Operation",
-            "Power Up",
+            "Power Up"};
+
+    std::vector<std::string> warning_states {};
+
+    std::vector<std::string> error_states {
             "Sensor Implausiblity",
             "Left sensor out of range - lower bound",
             "Left sensor out of range - upper bound",
             "Right sensor out of range - lower bound",
             "Right sensor out of range - upper bound"};
+
+    int current_state;
 };
 
 class Bms_Lv{
@@ -107,16 +119,22 @@ class Bms_Lv{
         SLEEP
     };
 
-    std::vector<std::string> bmslv_string_states {
+    std::vector<std::string> ok_states {
             "Normal Operation",
-            "Charging", 
+            "Charging"};
+
+    std::vector<std::string> warning_states {
             "Unbalanced",
-            "Temperature Warning",
+            "Temperature Warning"};
+
+    std::vector<std::string> error_states {
             "Voltage too low",
             "Voltage too high",
             "High Temperature",
             "High Current",
             "Sleeping"};
+
+    int current_state;
 };
 
 class Bms_Hv{
@@ -362,7 +380,7 @@ template<typename T>
 void Check_SC(T *SC, uint8_t new_s);
 
 template<typename T>
-void Update(T object, std::vector<double> Data)
+void Update_Data(T object, std::vector<double> Data)
 {
     int i=0;
     for(auto &m : object->fam.metrics_)

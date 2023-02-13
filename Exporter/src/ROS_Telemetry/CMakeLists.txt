@@ -10,6 +10,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
 
+add_compile_options(-gdwarf-4 -g)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -123,6 +124,7 @@ include_directories(
 
 add_subdirectory(Prometheus)
 add_subdirectory(ROS)
+add_subdirectory(Loki)
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
@@ -137,7 +139,7 @@ add_subdirectory(ROS)
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
- add_executable(${PROJECT_NAME}_node src/ROS_Telemetry_node.cpp ROS/ROS.cpp Prometheus/Communication.cpp)
+ add_executable(${PROJECT_NAME}_node src/ROS_Telemetry_node.cpp ROS/ROS.cpp Prometheus/Communication.cpp Loki/Loki.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -152,6 +154,13 @@ add_subdirectory(ROS)
 ## Specify libraries to link a library or executable target against
 target_link_libraries(${PROJECT_NAME}_node PRIVATE ${catkin_LIBRARIES} "/prometheus-cpp/lib/libprometheus-cpp-pull.so.1.1.0")
 target_link_libraries(${PROJECT_NAME}_node PRIVATE ${catkin_LIBRARIES} "/prometheus-cpp/lib/libprometheus-cpp-core.so.1.1")
+
+target_link_libraries(${PROJECT_NAME}_node PRIVATE "/loki-cpp/build/libloki-cpp.so")
+target_link_libraries(${PROJECT_NAME}_node PRIVATE "/lib/x86_64-linux-gnu/libcurl.so.4")
+# FMT JEST ZE ŹRÓDŁA BO INACZEJ NIE DZIAŁA!!
+target_link_libraries(${PROJECT_NAME}_node PRIVATE "/usr/local/lib/libfmt.a")
+
+target_compile_features(${PROJECT_NAME}_node PRIVATE cxx_std_17)
 ## Install ##
 #############
 

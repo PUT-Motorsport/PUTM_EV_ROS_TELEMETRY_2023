@@ -1,6 +1,6 @@
 add_library(Loki "")
 
-target_sources(Prometheus
+target_sources(Loki
   PRIVATE
     ${CMAKE_CURRENT_LIST_DIR}/Loki.cpp
   PUBLIC

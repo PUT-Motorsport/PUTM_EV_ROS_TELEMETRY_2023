@@ -1,4 +1,4 @@
-#include "Loki.h"
+#include "Loki.hpp"
 
 
 void Tlogs::Push_Error  (loki::AgentJson *Logger_Handler, std::string device, std::string message)
