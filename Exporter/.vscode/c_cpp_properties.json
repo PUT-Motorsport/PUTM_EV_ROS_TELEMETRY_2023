@@ -6,7 +6,7 @@
         "limitSymbolsToIncludedHeaders": false
       },
       "includePath": [
-        "/home/putm/Exporter/devel/include/**",
+        "/home/ketirange/PUTM_EV_ROS_TELEMETRY_2023/Exporter/devel/include/**",
         "/opt/ros/noetic/include/**",
         "/usr/include/**"
       ],

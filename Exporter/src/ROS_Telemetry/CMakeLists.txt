@@ -3,9 +3,9 @@ project(ROS_Telemetry)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 
-add_compile_options(-std=c++2a)
+add_compile_options(-std=c++17)
 add_compile_options(-DCMAKE_BUILD_TYPE=debug)
-set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
@@ -139,7 +139,7 @@ add_subdirectory(Loki)
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
- add_executable(${PROJECT_NAME}_node src/ROS_Telemetry_node.cpp ROS/ROS.cpp Prometheus/Communication.cpp Loki/Loki.cpp)
+ add_executable(${PROJECT_NAME}_node src/ROS_Telemetry_node.cpp ROS/ROS.cpp Prometheus/Communication.cpp Prometheus/SC.tpp Loki/Loki.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -152,13 +152,13 @@ add_subdirectory(Loki)
 # add_dependencies(${PROJECT_NAME}_node ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
 
 ## Specify libraries to link a library or executable target against
-target_link_libraries(${PROJECT_NAME}_node PRIVATE ${catkin_LIBRARIES} "/prometheus-cpp/lib/libprometheus-cpp-pull.so.1.1.0")
-target_link_libraries(${PROJECT_NAME}_node PRIVATE ${catkin_LIBRARIES} "/prometheus-cpp/lib/libprometheus-cpp-core.so.1.1")
+target_link_libraries(${PROJECT_NAME}_node PRIVATE ${catkin_LIBRARIES} "~/prometheus-cpp/build/lib/libprometheus-cpp-pull.so.1.1.0")
+target_link_libraries(${PROJECT_NAME}_node PRIVATE ${catkin_LIBRARIES} "~/prometheus-cpp/build/lib/libprometheus-cpp-core.so.1.1")
 
-target_link_libraries(${PROJECT_NAME}_node PRIVATE "/loki-cpp/build/libloki-cpp.so")
+target_link_libraries(${PROJECT_NAME}_node PRIVATE "/usr/local/lib/libloki-cpp.so.1")
 target_link_libraries(${PROJECT_NAME}_node PRIVATE "/lib/x86_64-linux-gnu/libcurl.so.4")
 # FMT JEST ZE ŹRÓDŁA BO INACZEJ NIE DZIAŁA!!
-target_link_libraries(${PROJECT_NAME}_node PRIVATE "/usr/local/lib/libfmt.a")
+target_link_libraries(${PROJECT_NAME}_node PRIVATE "/usr/local/lib/libfmt.so.9.1.1")
 
 target_compile_features(${PROJECT_NAME}_node PRIVATE cxx_std_17)
 ## Install ##

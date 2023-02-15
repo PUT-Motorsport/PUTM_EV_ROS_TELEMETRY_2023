@@ -1,4 +1,4 @@
-prefix=/home/putm/Exporter/install
+prefix=/home/ketirange/PUTM_EV_ROS_TELEMETRY_2023/Exporter/install
 
 Name: ROS_Telemetry
 Description: Description of ROS_Telemetry

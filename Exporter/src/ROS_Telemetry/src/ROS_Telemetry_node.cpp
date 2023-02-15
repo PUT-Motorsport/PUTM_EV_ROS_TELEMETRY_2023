@@ -15,9 +15,10 @@ Tlogs logger;
 int main(int argc, char *argv[])
 {  
     Exposer exposer{"127.0.0.1:8081"};
-    exposer.RegisterCollectable(registry_prometheus);
 
     ROS_INFO("Prometheus Online.");
+
+    logger.Push_Info(&logger.Telemetry_logger, "Server", "Server online");
 
     ros::init(argc, argv, "Telemetry");
     ros::NodeHandle n;

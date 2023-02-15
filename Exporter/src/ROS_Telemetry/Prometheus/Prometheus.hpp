@@ -17,6 +17,8 @@
 #include "prometheus/family.h"
 #include "prometheus/registry.h"
 
+#include "SC.tpp"
+
 #include "../Loki/Loki.hpp"
 
 using namespace prometheus;
@@ -64,7 +66,7 @@ class Apps{
     Gauge &Difference     = {fam.Add({{"Apps",    "Difference"}})};
     Gauge &Pedal_Position = {fam.Add({{"Apps","Pedal Position"}})};
 
-    //AgentJson &device_logger     = {logger.registry_loki.Add({{"Source", "PUTM_Telemetry"}, {"Device",device_name}})};
+    AgentJson &device_logger     = {logger.registry.Add({{"Source", "PUTM_Telemetry"}, {"Device",device_name}})};
 
     enum state
     {
@@ -96,6 +98,8 @@ class Apps{
 class Bms_Lv{
     public:
 
+    std::string device_name = "BMSLV";
+
     Family<Gauge> &fam = {BuildGauge()
                         .Name("BMS_LV")
                         .Help("--")
@@ -105,6 +109,8 @@ class Bms_Lv{
     Gauge& SoC         = {fam.Add({{"BMS_LV",        "SoC"}})};
     Gauge& Temperature = {fam.Add({{"BMS_LV","Temperature"}})};
     Gauge& Current     = {fam.Add({{"BMS_LV",    "Current"}})};
+
+    AgentJson &device_logger     = {logger.registry.Add({{"Source", "PUTM_Telemetry"}, {"Device",device_name}})};
 
      enum states
     {
@@ -309,6 +315,11 @@ class Temperatures{
 };
 class Shutdown_Circut_front{
     public:
+
+    std::string device_name = "Shutdown_Circut_front";
+
+    AgentJson &device_logger     = {logger.registry.Add({{"Source", "PUTM_Telemetry"}, {"Device",device_name}})};
+
     uint8_t safety_last = 0;
     uint8_t safety_new = 0;
      std::vector<std::string> safety_strings {
@@ -324,6 +335,11 @@ class Shutdown_Circut_front{
 
 class Shutdown_Circut_rear{
     public:
+
+    std::string device_name = "Shutdown_Circut_rear";
+
+    AgentJson &device_logger = {logger.registry.Add({{"Source", "PUTM_Telemetry"}, {"Device",device_name}})};
+
     uint8_t safety_last = 0;
     uint8_t safety_new = 0;
     std::vector<std::string> safety_strings {
@@ -388,6 +404,5 @@ void Update_Data(T object, std::vector<double> Data)
         m.second->Set(Data[i]);
         i++;
     }
-    std::cout << "End" << std::endl;
 }
  

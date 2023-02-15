@@ -1,8 +1,8 @@
-prefix=/home/putm/Exporter/devel
+prefix=/home/ketirange/PUTM_EV_ROS_TELEMETRY_2023/Exporter/devel
 
 Name: ROS_Telemetry
 Description: Description of ROS_Telemetry
 Version: 0.0.0
-Cflags: -I/home/putm/Exporter/devel/include
+Cflags: -I/home/ketirange/PUTM_EV_ROS_TELEMETRY_2023/Exporter/devel/include
 Libs: -L${prefix}/lib 
 Requires: roscpp std_msgs message_runtime
