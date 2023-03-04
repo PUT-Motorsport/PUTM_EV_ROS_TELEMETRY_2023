@@ -7,4 +7,4 @@
 # new environment variables
 
 # modified environment variables
-export PWD='/home/ketirange/PUTM_EV_ROS_TELEMETRY_2023/Exporter/build'
+export PWD='/home/putm/Exporter/build'

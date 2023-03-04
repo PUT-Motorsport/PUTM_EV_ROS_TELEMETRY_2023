@@ -16,41 +16,16 @@
 #include "prometheus/exposer.h"
 #include "prometheus/family.h"
 #include "prometheus/registry.h"
-
-#include "SC.tpp"
-
 #include "../Loki/Loki.hpp"
 
 using namespace prometheus;
+
 extern std::shared_ptr<prometheus::Registry> registry_prometheus;
 extern Tlogs logger;
 
 namespace Data
 {
 
-class Counters{
-    private:
-
-      Family<Counter>& MESSAGES_COUNTER = {BuildCounter()
-                        .Name("total_packets_received")
-                        .Help("--")
-                        .Register(*registry_prometheus)};
-    public:
-
-        Counter& msgA_cntr = (MESSAGES_COUNTER.Add({{"Telemetry_Statistics","message_A_total_packets_received"}}));
-        Counter& msgB_cntr = (MESSAGES_COUNTER.Add({{"Telemetry_Statistics","message_B_total_packets_received"}}));
-        Counter& msgC_cntr = (MESSAGES_COUNTER.Add({{"Telemetry_Statistics","message_C_total_packets_received"}}));
-        Counter& msgD_cntr = (MESSAGES_COUNTER.Add({{"Telemetry_Statistics","message_D_total_packets_received"}}));
-        Counter& msgE_cntr = (MESSAGES_COUNTER.Add({{"Telemetry_Statistics","message_E_total_packets_received"}}));
-        Counter& msgF_cntr = (MESSAGES_COUNTER.Add({{"Telemetry_Statistics","message_F_total_packets_received"}}));
-        Counter& msgG_cntr = (MESSAGES_COUNTER.Add({{"Telemetry_Statistics","message_G_total_packets_received"}}));
-
-    template<typename T>
-    void Increment_Counter(T *counter)
-    {
-        counter->Increment();
-    }
-};
 class Apps{
     public:
 
@@ -145,19 +120,19 @@ class Bms_Lv{
 
 class Bms_Hv{
     private:
-    Family<Gauge>& BMS_HV = {BuildGauge()
+    
+    Family<Gauge>& BMS_HV_FAM = {BuildGauge()
                         .Name("BMS_HV")
                         .Help("--")
                         .Register(*registry_prometheus)};
 
-    Gauge& Voltage          = {BMS_HV.Add({{"BMS_HV",        "Voltage"}})};
-    Gauge& Current          = {BMS_HV.Add({{"BMS_HV",        "Current"}})};
-    Gauge& SoC              = {BMS_HV.Add({{"BMS_HV",            "SoC"}})};
-    Gauge& Temperature_max  = {BMS_HV.Add({{"BMS_HV","Temperature max"}})};
-    Gauge& Temperature_avg  = {BMS_HV.Add({{"BMS_HV","Temperature avg"}})};
+    Gauge& Voltage          = {BMS_HV_FAM.Add({{"BMS_HV",        "Voltage"}})};
+    Gauge& Current          = {BMS_HV_FAM.Add({{"BMS_HV",        "Current"}})};
+    Gauge& SoC              = {BMS_HV_FAM.Add({{"BMS_HV",            "SoC"}})};
+    Gauge& Temperature_max  = {BMS_HV_FAM.Add({{"BMS_HV","Temperature max"}})};
+    Gauge& Temperature_avg  = {BMS_HV_FAM.Add({{"BMS_HV","Temperature avg"}})};
 
     public:
-
     enum states
         {
             AIR_OPENED,
@@ -183,9 +158,6 @@ class Bms_Hv{
                 "Voltage too high ",
                 "Temperature too high",
                 "Current to high"};
-
-
-    void Update_Metrics();
 };
 
 class Fuse{
@@ -199,26 +171,26 @@ class Fuse{
     Gauge& Current     = {FUSE.Add({{"FUSE","Current"}})};
 
     public:
-    void Update_Metrics();
 };
 
 class AQ_Card{
     private:
-    Family<Gauge>& AQ = {BuildGauge()
+    Family<Gauge>& AQ_FAM = {BuildGauge()
                         .Name("AQ_Card")
                         .Help("--")
                         .Register(*registry_prometheus)};
 
-    Gauge& Susp_front_right        = {AQ.Add({{"AQ_Card",    "Suspension_Right"}})};
-    Gauge& Susp_front_left         = {AQ.Add({{"AQ_Card",     "Suspension_Left"}})};
-    Gauge& brake_pressure_front    = {AQ.Add({{"AQ_Card","Brake Pressure_Front"}})};
-    Gauge& brake_pressure_rear     = {AQ.Add({{"AQ_Card", "Brake Pressure_Rear"}})};
-    Gauge& speed_x                 = {AQ.Add({{"AQ_Card",         "IMU front X"}})};
-    Gauge& speed_y                 = {AQ.Add({{"AQ_Card",         "IMU front Y"}})};
-    Gauge& speed_z                 = {AQ.Add({{"AQ_Card",         "IMU front Z"}})};
-    Gauge& acc_x                   = {AQ.Add({{"AQ_Card","Acceleration front X"}})};
-    Gauge& acc_y                   = {AQ.Add({{"AQ_Card","Acceleration front Y"}})};
-    Gauge& acc_z                   = {AQ.Add({{"AQ_Card","Acceleration front Z"}})};
+    Gauge& Susp_front_right        = {AQ_FAM.Add({{"AQ_Card",    "Suspension_Right"}})};
+    Gauge& Susp_front_left         = {AQ_FAM.Add({{"AQ_Card",     "Suspension_Left"}})};
+    Gauge& brake_pressure_front    = {AQ_FAM.Add({{"AQ_Card","Brake Pressure_Front"}})};
+    Gauge& brake_pressure_rear     = {AQ_FAM.Add({{"AQ_Card", "Brake Pressure_Rear"}})};
+    Gauge& speed_x                 = {AQ_FAM.Add({{"AQ_Card",         "IMU front X"}})};
+    Gauge& speed_y                 = {AQ_FAM.Add({{"AQ_Card",         "IMU front Y"}})};
+    Gauge& speed_z                 = {AQ_FAM.Add({{"AQ_Card",         "IMU front Z"}})};
+    Gauge& acc_x                   = {AQ_FAM.Add({{"AQ_Card","Acceleration front X"}})};
+    Gauge& acc_y                   = {AQ_FAM.Add({{"AQ_Card","Acceleration front Y"}})};
+    Gauge& acc_z                   = {AQ_FAM.Add({{"AQ_Card","Acceleration front Z"}})};
+    
     public:
 
     enum states
@@ -234,9 +206,6 @@ class AQ_Card{
             "NORMAL_OPERATION",
             "SENSOR_IMPLOSIBILITY"
         };
-
-
-    void Update_Metrics();
 };
 
 class Traction_Control{
@@ -284,8 +253,6 @@ class Traction_Control{
                 "Inverter Timeout",
                 "Inverter IPEAK"
                 };
-    
-    void Update_Metrics();
 };
  
 class Temperatures{
@@ -311,7 +278,6 @@ class Temperatures{
         &temp_water_out,
     };
     public:
-    void Update_Metrics();
 };
 class Shutdown_Circut_front{
     public:
@@ -393,7 +359,27 @@ class Time{
 }
 
 template<typename T>
-void Check_SC(T *SC, uint8_t new_s);
+void Check_SC(T *SC, uint8_t new_s)
+{
+    SC->safety_new = new_s;
+    unsigned int mask = 1;
+    if(SC->safety_last != SC->safety_new)
+    {
+        for(int i=0;i<SC->safety_strings.size();i++)
+        {
+            if(!(SC->safety_new & mask))
+            {
+                logger.Push_Error(&SC->device_logger, SC->device_name, SC->safety_strings[i], "Open");
+            }
+            else
+            {
+                logger.Push_Info(&SC->device_logger, SC->device_name, SC->safety_strings[i], "Closed");
+            }
+            mask <<= 1;
+        }
+    }
+    SC->safety_last = SC->safety_new; 
+}
 
 template<typename T>
 void Update_Data(T object, std::vector<double> Data)

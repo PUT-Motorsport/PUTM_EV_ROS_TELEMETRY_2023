@@ -67,14 +67,14 @@ set(ROS_Telemetry_CONFIG_INCLUDED TRUE)
 
 # set variables for source/devel/install prefixes
 if("FALSE" STREQUAL "TRUE")
-  set(ROS_Telemetry_SOURCE_PREFIX /home/ketirange/PUTM_EV_ROS_TELEMETRY_2023/Exporter/src/ROS_Telemetry)
-  set(ROS_Telemetry_DEVEL_PREFIX /home/ketirange/PUTM_EV_ROS_TELEMETRY_2023/Exporter/devel)
+  set(ROS_Telemetry_SOURCE_PREFIX /home/putm/Exporter/src/ROS_Telemetry)
+  set(ROS_Telemetry_DEVEL_PREFIX /home/putm/Exporter/devel)
   set(ROS_Telemetry_INSTALL_PREFIX "")
   set(ROS_Telemetry_PREFIX ${ROS_Telemetry_DEVEL_PREFIX})
 else()
   set(ROS_Telemetry_SOURCE_PREFIX "")
   set(ROS_Telemetry_DEVEL_PREFIX "")
-  set(ROS_Telemetry_INSTALL_PREFIX /home/ketirange/PUTM_EV_ROS_TELEMETRY_2023/Exporter/install)
+  set(ROS_Telemetry_INSTALL_PREFIX /home/putm/Exporter/install)
   set(ROS_Telemetry_PREFIX ${ROS_Telemetry_INSTALL_PREFIX})
 endif()
 
@@ -91,9 +91,9 @@ endif()
 # flag project as catkin-based to distinguish if a find_package()-ed project is a catkin project
 set(ROS_Telemetry_FOUND_CATKIN_PROJECT TRUE)
 
-if(NOT "include " STREQUAL " ")
+if(NOT " " STREQUAL " ")
   set(ROS_Telemetry_INCLUDE_DIRS "")
-  set(_include_dirs "include")
+  set(_include_dirs "")
   if(NOT " " STREQUAL " ")
     set(_report "Check the issue tracker '' and consider creating a ticket if the problem has not been reported yet.")
   elseif(NOT " " STREQUAL " ")
@@ -154,7 +154,7 @@ foreach(library ${libraries})
     set(lib_path "")
     set(lib "${library}-NOTFOUND")
     # since the path where the library is found is returned we have to iterate over the paths manually
-    foreach(path /home/ketirange/PUTM_EV_ROS_TELEMETRY_2023/Exporter/install/lib;/home/ketirange/PUTM_EV_ROS_TELEMETRY_2023/Exporter/devel/lib;/opt/ros/noetic/lib)
+    foreach(path /home/putm/Exporter/install/lib;/home/putm/Exporter/devel/lib;/opt/ros/noetic/lib)
       find_library(lib ${library}
         PATHS ${path}
         NO_DEFAULT_PATH NO_CMAKE_FIND_ROOT_PATH)

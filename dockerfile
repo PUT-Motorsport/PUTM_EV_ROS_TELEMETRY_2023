@@ -1,7 +1,7 @@
 #docker system prune -a
 #docker build -t steering .
 #docker run --name Steering_program -it steering
-#sudo docker run --name telemetry_node --network=host telemetry_node:latest -v /home/adam/Projects/PUTM/PUTM_EV_ROS_TELEMETRY_2023/:/home/putm -it telemetry
+#sudo docker run --name telemetry_node --network=host -v /home/ketirange/Projects/PUTM_EV_ROS_TELEMETRY_2023/:/home/putm -it telemetry
 
 FROM ros:noetic-ros-base-focal as base
 

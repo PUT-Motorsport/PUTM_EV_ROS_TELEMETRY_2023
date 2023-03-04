@@ -1,2 +1,2 @@
 ROS_Telemetry
--DCMAKE_BUILD_TYPE=debug -DCATKIN_DEVEL_PREFIX=/home/ketirange/PUTM_EV_ROS_TELEMETRY_2023/Exporter/devel -DCMAKE_INSTALL_PREFIX=/home/ketirange/PUTM_EV_ROS_TELEMETRY_2023/Exporter/install -G Unix Makefiles
+-DCATKIN_DEVEL_PREFIX=/home/putm/Exporter/devel -DCMAKE_INSTALL_PREFIX=/home/putm/Exporter/install -G Unix Makefiles

@@ -15,6 +15,8 @@
 
 extern Tlogs logger;
 
+/*
+
 template<typename T>
 void Check_SC(T *SC, uint8_t new_s)
 {
@@ -37,3 +39,4 @@ void Check_SC(T *SC, uint8_t new_s)
     }
     SC->safety_last = SC->safety_new; 
 }
+*/

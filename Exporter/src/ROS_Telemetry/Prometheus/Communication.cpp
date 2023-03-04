@@ -5,7 +5,7 @@
 #include "Communication.hpp"
 
 Communication::semafora s1;
-extern Communication::variable_labels labels;
+Communication::variable_labels labels{"Practice", "default", "Dry"};
 
 void Set_driver()
 {
