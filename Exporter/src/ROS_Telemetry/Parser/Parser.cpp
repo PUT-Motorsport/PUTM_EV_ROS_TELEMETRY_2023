@@ -1,7 +1,5 @@
 #include "Parser.hpp"
 #include "../Prometheus/Prometheus.hpp"
-#include "../Prometheus/SC.tpp"
-#include "../Loki/Loki.hpp"
 
 Data::Apps *apps = new Data::Apps();
 Data::AQ_Card *aq = new Data::AQ_Card();
@@ -21,15 +19,8 @@ void Run()
     if(parsing_handler.state == CAN_Parser::ERROR) {return;}
     while(true)
     {
-        parsing_handler.Receive();
+        parsing_handler.Push();
     }
-}
-
-void CAN_Parser::Receive()
-{
-    can_frame fr1;
-    can.structure_receive_random(fr1);
-    frame_buffer.push_back(fr1);
 }
 
 void CAN_Parser::Parser()
@@ -37,9 +28,7 @@ void CAN_Parser::Parser()
     std::lock_guard<std::mutex> guard(buffer_mutex);
     while(frame_buffer.size() == 0);
 
-    auto frtmp = frame_buffer.back();
-    frame_buffer.pop_back();
-    buffer_mutex.unlock();
+    auto frtmp = Pop();
 
     switch(frtmp.can_id)
     {

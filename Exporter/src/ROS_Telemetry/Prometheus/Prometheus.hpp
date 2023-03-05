@@ -18,6 +18,8 @@
 #include "prometheus/registry.h"
 #include "../Loki/Loki.hpp"
 
+#include "putm_can_interface.hpp"
+
 using namespace prometheus;
 
 extern std::shared_ptr<prometheus::Registry> registry_prometheus;
@@ -27,9 +29,7 @@ namespace Data
 {
 
 class Apps{
-    public:
-
-    std::string device_name = "Apps";
+    private:
 
     Family<Gauge> &fam = {BuildGauge()
                         .Name("APPS")
@@ -41,18 +41,11 @@ class Apps{
     Gauge &Difference     = {fam.Add({{"Apps",    "Difference"}})};
     Gauge &Pedal_Position = {fam.Add({{"Apps","Pedal Position"}})};
 
-    AgentJson &device_logger     = {logger.registry.Add({{"Source", "PUTM_Telemetry"}, {"Device",device_name}})};
+    public:
 
-    enum state
-    {
-        NORMAL_OPERATION,
-        POWER_UP,
-        SENSOR_IMPLAUSIBLITY,
-        LEFT_SENSOR_OUT_OF_RANGE_LOWER_BOUND,
-        LEFT_SENSOR_OUT_OF_RANGE_UPPER_BOUND,
-        RIGHT_SENSOR_OUT_OF_RANGE_LOWER_BOUND,
-        RIGHT_SENSOR_OUT_OF_RANGE_UPPER_BOUND
-    };
+    std::string device_name = "Apps";
+    AgentJson &device_logger = {logger.registry.Add({{"Source", "PUTM_Telemetry"}, {"Device",device_name}})};
+    int current_state;
 
     std::vector<std::string> ok_states {
             "Normal Operation",
@@ -67,7 +60,7 @@ class Apps{
             "Right sensor out of range - lower bound",
             "Right sensor out of range - upper bound"};
 
-    int current_state;
+    void Update_metrics(PUTM_CAN::Apps_main apps_frame);
 };
 
 class Bms_Lv{
@@ -86,19 +79,6 @@ class Bms_Lv{
     Gauge& Current     = {fam.Add({{"BMS_LV",    "Current"}})};
 
     AgentJson &device_logger     = {logger.registry.Add({{"Source", "PUTM_Telemetry"}, {"Device",device_name}})};
-
-     enum states
-    {
-        NORMAL,
-        CHARGING,
-        UNBALANCED,
-        TEMP_WARNING,
-        VOLTAGE_LOW,
-        VOLTAGE_HIGH,
-        TEMP_HIGH,
-        CURRENT_HIGH,   
-        SLEEP
-    };
 
     std::vector<std::string> ok_states {
             "Normal Operation",
@@ -133,21 +113,8 @@ class Bms_Hv{
     Gauge& Temperature_avg  = {BMS_HV_FAM.Add({{"BMS_HV","Temperature avg"}})};
 
     public:
-    enum states
-        {
-            AIR_OPENED,
-            AIR_CLOSED,
-            PRECHARGE,
-            CHARGER_CONNECTED,
-            UNBALANCED,
-            UNBALANCED_CRITICAL,
-            VOLTAGE_LOW,
-            VOLTAGE_HIGH,
-            TEMP_HIGH,
-            CURRENT_HIGH, 
-        };
 
-      std::vector<std::string> bmshv_string_states {
+    std::vector<std::string> bmshv_string_states {
                 "AIRs Opened",
                 "AIRs Closed", 
                 "Precharge On",
@@ -193,13 +160,6 @@ class AQ_Card{
     
     public:
 
-    enum states
-        {
-            POWER_UP,
-            NORMAL_OPERATION,
-            SENSOR_IMPLOSIBILITY
-        };
-
     std::vector<std::string> aq_string_states 
         {
             "POWER_UP",
@@ -233,16 +193,6 @@ class Traction_Control{
     Gauge& gyro_z                   = {TC.Add({{"Tracion_Control",          "IMU read"}})};
 
     public:
-    enum states
-        {
-            NORMAL_OPERATION,
-            POWER_UP,
-            APPS_TIMEOUT,
-            APPS_INVALID_VALUE,
-            APPS_SKIP_FRAME,
-            INV_TIMEOUT,
-            INT_PEAK
-        };
 
     std::vector<std::string> tc_string_states {
                 "Normal Operation",
@@ -379,16 +329,5 @@ void Check_SC(T *SC, uint8_t new_s)
         }
     }
     SC->safety_last = SC->safety_new; 
-}
-
-template<typename T>
-void Update_Data(T object, std::vector<double> Data)
-{
-    int i=0;
-    for(auto &m : object->fam.metrics_)
-    {
-        m.second->Set(Data[i]);
-        i++;
-    }
 }
  

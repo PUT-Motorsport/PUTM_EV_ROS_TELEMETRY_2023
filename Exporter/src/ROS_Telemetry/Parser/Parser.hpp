@@ -1,6 +1,7 @@
 #pragma once
 
 #include <thread>
+#include <queue>
 #include <ros/ros.h>
 #include "putm_can_interface.hpp"
 
@@ -18,7 +19,7 @@ class CAN_Parser{
     //Can handler
     PUTM_CAN::CAN can;
     //buffer for frames
-    std::vector<can_frame> frame_buffer;
+    std::queue<can_frame> frame_buffer;
     public:
 
     enum STATE{
@@ -40,7 +41,22 @@ class CAN_Parser{
     }
     //parser ze switch case. pobiera ramkę z bufora i updateuje metryki.
     void Start();
-    void Receive();
+
+    void inline Push()
+    {
+        can_frame fr1;
+        can.structure_receive_random(fr1);
+        std::lock_guard<std::mutex> guard(buffer_mutex);
+        frame_buffer.push(fr1);
+    }
+    can_frame inline Pop()
+    {
+        auto frtmp = frame_buffer.front();
+        frame_buffer.pop();
+        buffer_mutex.unlock();
+        return frtmp;
+    }
+    
     void Parser();
 };
 }
