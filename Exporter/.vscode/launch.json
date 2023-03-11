@@ -8,7 +8,7 @@
             "name": "ROS: Launch",
             "type": "ros",
             "request": "launch",
-            "target": "/home/ketirange/PUTM_EV_ROS_TELEMETRY_2023/Exporter/src/ROS_Telemetry/launch/telemetry.launch"
+            "target": "/home/putm/Exporter/src/ROS_Telemetry/launch/telemetry.launch"
         }
 
     ]

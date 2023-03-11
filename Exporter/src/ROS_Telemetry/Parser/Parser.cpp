@@ -16,6 +16,7 @@ namespace Parser{
 void Run()
 {
     CAN_Parser parsing_handler;
+    parsing_handler.Start();
     if(parsing_handler.state == CAN_Parser::ERROR) {return;}
     while(true)
     {
@@ -23,18 +24,25 @@ void Run()
     }
 }
 
+void CAN_Parser::Start()
+{
+    rec = new std::thread(&CAN_Parser::Parser, this);
+}
+
 void CAN_Parser::Parser()
 {
-    std::lock_guard<std::mutex> guard(buffer_mutex);
+    while(true)
+    {
     while(frame_buffer.size() == 0);
-
-    auto frtmp = Pop();
-
+    
+    can_frame frtmp = Pop();
     switch(frtmp.can_id)
     {
         case PUTM_CAN::APPS_MAIN_CAN_ID:
         {
-            
+            PUTM_CAN::Apps_main appstmp;
+            memcpy(&appstmp, &frtmp.data, sizeof(frtmp.data));
+            apps->Update_metrics(appstmp);
         }
         break;
 
@@ -43,6 +51,7 @@ void CAN_Parser::Parser()
 
         }
         break;
+    }
     }
 }
 }

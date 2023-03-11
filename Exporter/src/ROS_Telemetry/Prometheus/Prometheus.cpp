@@ -2,6 +2,7 @@
 
 using namespace Data;
 
+
 void Apps::Update_metrics(PUTM_CAN::Apps_main apps_frame)
 {
     Counter.Set(apps_frame.counter);

@@ -18,7 +18,7 @@
 #include "prometheus/registry.h"
 #include "../Loki/Loki.hpp"
 
-#include "putm_can_interface.hpp"
+#include "../PUTM_DV_ROS2CAN_2023/Inc/putm_can_interface.hpp"
 
 using namespace prometheus;
 
