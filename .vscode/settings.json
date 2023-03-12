@@ -1,3 +1,3 @@
 {
-    "cmake.sourceDirectory": "${workspaceFolder}/Exporter"
+    "cmake.sourceDirectory": "${workspaceFolder}/Exporter/src/ROS_Telemetry"
 }

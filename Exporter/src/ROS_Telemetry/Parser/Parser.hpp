@@ -51,9 +51,9 @@ class CAN_Parser{
     }
     can_frame inline Pop()
     {
+        std::lock_guard<std::mutex> guard(frame_buffer_mutex);
         auto frtmp = frame_buffer.front();
         frame_buffer.pop();
-        frame_buffer_mutex.unlock();
         return frtmp;
     }
     

@@ -19,7 +19,7 @@ RUN apt-get install apt-utils libprotobuf-dev -y
 RUN apt-get install curl libssl-dev libcurl4-openssl-dev -y
 RUN apt-get install libfmt-dev -y
 RUN sudo apt-get install -y libsnappy-dev
-RUN apt-get install gdb -y
+RUN apt-get install gdb kmod can-utils net-tools udev -y
 
 RUN git clone https://github.com/jupp0r/prometheus-cpp.git
 WORKDIR prometheus-cpp

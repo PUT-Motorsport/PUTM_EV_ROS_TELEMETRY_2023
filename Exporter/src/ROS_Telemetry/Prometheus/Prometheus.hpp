@@ -31,15 +31,15 @@ namespace Data
 class Apps{
     private:
 
-    Family<Gauge> &fam = {BuildGauge()
+    Family<Gauge> &APPS1 = {BuildGauge()
                         .Name("APPS")
                         .Help("--")
                         .Register(*registry_prometheus)};
 
     //Order here matters. Gauges should be defined in opposite order, than in msg file.
-    Gauge &Counter        = {fam.Add({{"Apps",       "Counter"}})};
-    Gauge &Difference     = {fam.Add({{"Apps",    "Difference"}})};
-    Gauge &Pedal_Position = {fam.Add({{"Apps","Pedal Position"}})};
+    Gauge &Counter        = {APPS1.Add({{"Apps",       "Counter"}})};
+    Gauge &Difference     = {APPS1.Add({{"Apps",    "Difference"}})};
+    Gauge &Pedal_Position = {APPS1.Add({{"Apps","Pedal Position"}})};
 
     public:
 
@@ -60,7 +60,7 @@ class Apps{
             "Right sensor out of range - lower bound",
             "Right sensor out of range - upper bound"};
 
-    void Update_metrics(PUTM_CAN::Apps_main apps_frame);
+    void Update_metrics(PUTM_CAN::Apps_main);
 };
 
 class Bms_Lv{

@@ -24,6 +24,7 @@ void Run()
     }
 }
 
+
 void CAN_Parser::Start()
 {
     rec = new std::thread(&CAN_Parser::Parser, this);
@@ -33,9 +34,11 @@ void CAN_Parser::Parser()
 {
     while(true)
     {
+        
     while(frame_buffer.size() == 0);
     
     can_frame frtmp = Pop();
+
     switch(frtmp.can_id)
     {
         case PUTM_CAN::APPS_MAIN_CAN_ID:
