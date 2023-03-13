@@ -3,7 +3,7 @@
 #include <thread>
 #include <queue>
 #include <ros/ros.h>
-#include "../PUTM_DV_ROS2CAN_2023/Inc/putm_can_interface.hpp"
+#include "../PUTM_DV_CAN_LIBRARY/Inc/putm_can_interface.hpp"
 
 namespace Parser{
 
@@ -45,7 +45,7 @@ class CAN_Parser{
     void inline Push()
     {
         can_frame fr1;
-        can.structure_receive_random(fr1);
+        can.structure_receive_random(fr1, PUTM_CAN::NO_TIMEOUT);
         std::lock_guard<std::mutex> guard(frame_buffer_mutex);
         frame_buffer.push(fr1);
     }

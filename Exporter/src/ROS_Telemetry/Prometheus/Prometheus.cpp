@@ -12,3 +12,7 @@ void Apps::Update_metrics(PUTM_CAN::Apps_main apps_frame)
     Update_State(this, uint8_t(apps_frame.device_state));
 }
 
+void AQ_Card::Update_metrics(PUTM_CAN::AQ_acceleration aq_acc)
+{
+
+}

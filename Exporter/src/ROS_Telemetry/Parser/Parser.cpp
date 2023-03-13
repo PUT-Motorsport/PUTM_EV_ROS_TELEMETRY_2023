@@ -6,9 +6,7 @@ Data::AQ_Card *aq = new Data::AQ_Card();
 Data::Bms_Lv *lv = new Data::Bms_Lv();
 Data::Bms_Hv *hv = new Data::Bms_Hv();
 Data::Traction_Control *tc = new Data::Traction_Control();
-Data::Temperatures *temps = new Data::Temperatures();
 Data::Time *times = new Data::Time();
-Data::Shutdown_Circut_front *fsh = new Data::Shutdown_Circut_front();
 Data::Shutdown_Circut_rear *rsh = new Data::Shutdown_Circut_rear();
 
 namespace Parser{
@@ -50,6 +48,146 @@ void CAN_Parser::Parser()
         break;
 
         case PUTM_CAN::AQ_ACCELERATION_CAN_ID:
+        {
+            PUTM_CAN::AQ_acceleration aqacctmp;
+            memcpy(&aqacctmp, &frtmp.data, sizeof(frtmp.data));
+            aq->Update_metrics(aqacctmp);
+        }
+        break;
+
+        case PUTM_CAN::AQ_GYROSCOPE_CAN_ID:
+        {
+
+        }
+        break;
+        
+        case PUTM_CAN::AQ_MAIN_CAN_ID:
+        {
+
+        }
+        break;
+
+        case PUTM_CAN::AQ_TS_BUTTON_CAN_ID:
+        {
+
+        }
+        break;
+
+        case PUTM_CAN::BMS_LV_MAIN_CAN_ID:
+        {
+
+        }
+        break;
+
+        case PUTM_CAN::BMS_LV_TEMPERATURE_CAN_ID:
+        {
+
+        }
+        break;
+
+        case PUTM_CAN::DASH_MAIN_CAN_ID:
+        {
+
+        }
+        break;
+
+        case PUTM_CAN::DV_ASS_CAN_ID:
+        {
+
+        }
+        break;
+
+        case PUTM_CAN::LAP_TIMER_ACC_TIME_CAN_ID:
+        {
+
+        }
+        break;
+
+        case PUTM_CAN::LAP_TIMER_LAP_TIME_CAN_ID:
+        {
+
+        }
+        break;
+
+        case PUTM_CAN::LAP_TIMER_MAIN_CAN_ID:
+        {
+
+        }
+        break;
+
+        case PUTM_CAN::LAP_TIMER_SECTOR_CAN_ID:
+        {
+
+        }
+        break;
+
+        case PUTM_CAN::LAP_TIMER_SKIDPAD_TIME_CAN_ID:
+        {
+
+        }
+        break;
+
+        case PUTM_CAN::SF_MAIN_CAN_ID:
+        {
+
+        }
+        break;
+
+        case PUTM_CAN::SF_SAFETY_CAN_ID:
+        {
+
+        }
+        break;
+
+        case PUTM_CAN::TC_IMU_ACC_CAN_ID:
+        {
+
+        }
+        break;
+
+        case PUTM_CAN::TC_IMU_GYRO_CAN_ID:
+        {
+
+        }
+        break;
+
+
+        case PUTM_CAN::TC_MAIN_CAN_ID:
+        {
+
+        }
+        break;
+
+
+        case PUTM_CAN::TC_REAR_SUSPENSION_CAN_ID:
+        {
+
+        }
+        break;
+
+
+        case PUTM_CAN::TC_TEMPERATURES_CAN_ID:
+        {
+
+        }
+        break;
+
+
+        case PUTM_CAN::TC_WHEEL_VELOCITIES_CAN_ID:
+        {
+
+        }
+        break;
+
+
+        case PUTM_CAN::WHEELTEMP_MAIN_CAN_ID:
+        {
+
+        }
+        break;
+
+
+        case PUTM_CAN::YAWPROBE_AIR_FLOW_CAN_ID:
         {
 
         }

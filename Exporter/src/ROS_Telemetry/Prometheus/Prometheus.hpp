@@ -18,7 +18,7 @@
 #include "prometheus/registry.h"
 #include "../Loki/Loki.hpp"
 
-#include "../PUTM_DV_ROS2CAN_2023/Inc/putm_can_interface.hpp"
+#include "../PUTM_DV_CAN_LIBRARY/Inc/putm_can_interface.hpp"
 
 using namespace prometheus;
 
@@ -96,6 +96,9 @@ class Bms_Lv{
             "Sleeping"};
 
     int current_state;
+
+    void Update_metrics(PUTM_CAN::BMS_LV_main);
+    void Update_metrics(PUTM_CAN::BMS_LV_temperature);
 };
 
 class Bms_Hv{
@@ -125,6 +128,10 @@ class Bms_Hv{
                 "Voltage too high ",
                 "Temperature too high",
                 "Current to high"};
+
+    int current_state;
+
+    void Update_metrics(PUTM_CAN::BMS_HV_main);
 };
 
 class Fuse{
@@ -138,10 +145,18 @@ class Fuse{
     Gauge& Current     = {FUSE.Add({{"FUSE","Current"}})};
 
     public:
+
+
+    int current_state;
+
+    void Update_metrics(PUTM_CAN::SF_main);
 };
 
 class AQ_Card{
     private:
+
+    std::string device_name = "AQ_Card";
+
     Family<Gauge>& AQ_FAM = {BuildGauge()
                         .Name("AQ_Card")
                         .Help("--")
@@ -158,6 +173,20 @@ class AQ_Card{
     Gauge& acc_y                   = {AQ_FAM.Add({{"AQ_Card","Acceleration front Y"}})};
     Gauge& acc_z                   = {AQ_FAM.Add({{"AQ_Card","Acceleration front Z"}})};
     
+    AgentJson &device_logger     = {logger.registry.Add({{"Source", "PUTM_Telemetry"}, {"Device",device_name}})};
+
+    uint8_t safety_last = 0;
+    uint8_t safety_new = 0;
+     std::vector<std::string> safety_strings {
+        "OVERTRAVEL",
+        "LEFT_KILL",
+        "RIGHT_KILL",
+        "BSPD",
+        "DRIVER_KILL",
+        "INERTIA",
+        "EBS"
+        };
+
     public:
 
     std::vector<std::string> aq_string_states 
@@ -166,6 +195,12 @@ class AQ_Card{
             "NORMAL_OPERATION",
             "SENSOR_IMPLOSIBILITY"
         };
+    
+    int current_state;
+
+    void Update_metrics(PUTM_CAN::AQ_acceleration);
+    void Update_metrics(PUTM_CAN::AQ_gyroscope);
+    void Update_metrics(PUTM_CAN::AQ_main);
 };
 
 class Traction_Control{
@@ -175,22 +210,28 @@ class Traction_Control{
                         .Help("--")
                         .Register(*registry_prometheus)};
 
-    Gauge& vehicle_speed            = {TC.Add({{"Tracion_Control",     "Vehicle speed"}})};
-    Gauge& motor_current            = {TC.Add({{"Tracion_Control",             "Motor"}})};
-    Gauge& motor_speed              = {TC.Add({{"Tracion_Control",             "Motor"}})};
-    Gauge& tc_intensity             = {TC.Add({{"Tracion_Control",      "TC intensity"}})};
-    Gauge& suspension_rear_left     = {TC.Add({{"Tracion_Control",        "Suspension"}})};
-    Gauge& suspension_rear_right    = {TC.Add({{"Tracion_Control",        "Suspension"}})};
-    Gauge& wheel_front_left         = {TC.Add({{"Tracion_Control",        "Wheel speed front left"}})};
-    Gauge& wheel_front_right        = {TC.Add({{"Tracion_Control",       "Wheel speed front right"}})};
-    Gauge& wheel_rear_left          = {TC.Add({{"Tracion_Control",         "Wheel speed rear left"}})};
-    Gauge& wheel_rear_right         = {TC.Add({{"Tracion_Control",        "Wheel speed rear right"}})};
-    Gauge& acc_x                    = {TC.Add({{"Tracion_Control","Acceleretion front"}})};
-    Gauge& acc_y                    = {TC.Add({{"Tracion_Control","Acceleretion front"}})};
-    Gauge& acc_z                    = {TC.Add({{"Tracion_Control","Acceleretion front"}})};
-    Gauge& gyro_x                   = {TC.Add({{"Tracion_Control",          "IMU read"}})};
-    Gauge& gyro_y                   = {TC.Add({{"Tracion_Control",          "IMU read"}})};
-    Gauge& gyro_z                   = {TC.Add({{"Tracion_Control",          "IMU read"}})};
+    Gauge& vehicle_speed            = {TC.Add({{"Tracion_Control",                                    "Vehicle speed"}})};
+    Gauge& motor_current            = {TC.Add({{"Tracion_Control",                                            "Motor"}})};
+    Gauge& motor_speed              = {TC.Add({{"Tracion_Control",                                            "Motor"}})};
+    Gauge& tc_intensity             = {TC.Add({{"Tracion_Control",                                     "TC intensity"}})};
+    Gauge& suspension_rear_left     = {TC.Add({{"Tracion_Control",                                       "Suspension"}})};
+    Gauge& suspension_rear_right    = {TC.Add({{"Tracion_Control",                                       "Suspension"}})};
+    Gauge& wheel_front_left         = {TC.Add({{"Tracion_Control",                           "Wheel speed front left"}})};
+    Gauge& wheel_front_right        = {TC.Add({{"Tracion_Control",                          "Wheel speed front right"}})};
+    Gauge& wheel_rear_left          = {TC.Add({{"Tracion_Control",                            "Wheel speed rear left"}})};
+    Gauge& wheel_rear_right         = {TC.Add({{"Tracion_Control",                           "Wheel speed rear right"}})};
+    Gauge& acc_x                    = {TC.Add({{"Tracion_Control",                               "Acceleretion front"}})};
+    Gauge& acc_y                    = {TC.Add({{"Tracion_Control",                               "Acceleretion front"}})};
+    Gauge& acc_z                    = {TC.Add({{"Tracion_Control",                               "Acceleretion front"}})};
+    Gauge& gyro_x                   = {TC.Add({{"Tracion_Control",                                         "IMU read"}})};
+    Gauge& gyro_y                   = {TC.Add({{"Tracion_Control",                                         "IMU read"}})};
+    Gauge& gyro_z                   = {TC.Add({{"Tracion_Control",                                         "IMU read"}})};
+    Gauge& temp_engine              = {TC.Add({{"Tracion_Control",   "Temperature engine"},{"Temperatures","   Motor"}})};
+    Gauge& temp_inverter            = {TC.Add({{"Tracion_Control", "Temperature inverter"},{"Temperatures","Inverter"}})};
+    Gauge& water_p_in               = {TC.Add({{"Tracion_Control",    "Water pressure in"},{"Temperatures","   Water"}})};
+    Gauge& water_p_out              = {TC.Add({{"Tracion_Control",   "Water pressure out"},{"Temperatures","   Water"}})};
+    Gauge& temp_water_in            = {TC.Add({{"Tracion_Control", "Water temperature in"},{"Temperatures","   Water"}})};
+    Gauge& temp_water_out           = {TC.Add({{"Tracion_Control","Water temperature out"},{"Temperatures","   Water"}})};
 
     public:
 
@@ -203,32 +244,15 @@ class Traction_Control{
                 "Inverter Timeout",
                 "Inverter IPEAK"
                 };
+    
+    void Update_metrics(PUTM_CAN::TC_imu_acc);
+    void Update_metrics(PUTM_CAN::TC_imu_gyro);
+    void Update_metrics(PUTM_CAN::TC_main);
+    void Update_metrics(PUTM_CAN::TC_wheel_velocities);    
+    void Update_metrics(PUTM_CAN::TC_temperatures);
 };
- 
-class Temperatures{
-    private:
-    Family<Gauge>& temps = {BuildGauge()
-                        .Name("Temperatures")
-                        .Help("--")
-                        .Register(*registry_prometheus)};
 
-    Gauge& temp_engine         = {temps.Add({{"Temperatures","   Motor"}})};
-    Gauge& temp_inverter       = {temps.Add({{"Temperatures","Inverter"}})};
-    Gauge& water_p_in          = {temps.Add({{"Temperatures","   Water"}})};
-    Gauge& water_p_out         = {temps.Add({{"Temperatures","   Water"}})};
-    Gauge& temp_water_in       = {temps.Add({{"Temperatures","   Water"}})};
-    Gauge& temp_water_out      = {temps.Add({{"Temperatures","   Water"}})};
-
-    std::vector<Gauge*> Tempsv {
-        &temp_engine, 
-        &temp_inverter,
-        &water_p_in, 
-        &water_p_out,  
-        &temp_water_in,
-        &temp_water_out,
-    };
-    public:
-};
+/*
 class Shutdown_Circut_front{
     public:
 
@@ -247,7 +271,9 @@ class Shutdown_Circut_front{
         "INERTIA",
         "EBS"
         };
+     void Update_metrics(PUTM_CAN::AQ);
 };
+*/
 
 class Shutdown_Circut_rear{
     public:
@@ -258,6 +284,7 @@ class Shutdown_Circut_rear{
 
     uint8_t safety_last = 0;
     uint8_t safety_new = 0;
+
     std::vector<std::string> safety_strings {
         "TSMS",
         "DV",
@@ -265,6 +292,7 @@ class Shutdown_Circut_rear{
         "HVD",
         "FIREWALL"
         };
+    void Update_metrics(PUTM_CAN::SF_safety);
 };
 
 class Time{
@@ -304,6 +332,13 @@ class Time{
     void Set_Skidpad_Ignore_Boundaries(float upper, float lower){
         SkidPad_lower = lower;
         SkidPad_upper = upper;}
+
+    void Update_metrics(PUTM_CAN::Lap_timer_Acc_time);
+    void Update_metrics(PUTM_CAN::Lap_timer_Lap_time);
+    void Update_metrics(PUTM_CAN::Lap_timer_Main);
+    void Update_metrics(PUTM_CAN::Lap_timer_Skidpad_time);
+    void Update_metrics(PUTM_CAN::Lap_timer_Sector);
+    //void Update_metrics(PUTM_CAN::SF_safety);
 };
 
 }
