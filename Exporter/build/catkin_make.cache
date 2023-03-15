@@ -1,2 +1,0 @@
-ROS_Telemetry
--DCATKIN_DEVEL_PREFIX=/home/putm/Exporter/devel -DCMAKE_INSTALL_PREFIX=/home/putm/Exporter/install -G Unix Makefiles
