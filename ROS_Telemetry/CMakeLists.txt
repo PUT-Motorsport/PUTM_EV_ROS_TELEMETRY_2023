@@ -137,7 +137,7 @@ add_subdirectory(Loki)
 ## Declare a C++ executable
 ## With catkin_make all packages are built within a single CMake context
 ## The recommended prefix ensures that target names across packages don't collide
- add_executable(${PROJECT_NAME}_node src/ROS_Telemetry_node.cpp Parser/Parser.cpp Prometheus/Communication.cpp Prometheus/SC.tpp Loki/Loki.cpp)
+ add_executable(${PROJECT_NAME}_node src/ROS_Telemetry_node.cpp Parser/Parser.cpp Prometheus/Prometheus.cpp Prometheus/Communication.cpp Loki/Loki.cpp)
 
 ## Rename C++ executable without prefix
 ## The above recommended prefix causes long target names, the following renames the
@@ -155,7 +155,6 @@ target_link_libraries(${PROJECT_NAME}_node PRIVATE ${catkin_LIBRARIES} "/prometh
 
 target_link_libraries(${PROJECT_NAME}_node PRIVATE "/usr/local/lib/libloki-cpp.so.1")
 target_link_libraries(${PROJECT_NAME}_node PRIVATE "/lib/x86_64-linux-gnu/libcurl.so.4")
-target_link_libraries(${PROJECT_NAME}_node PRIVATE "/usr/local/lib/libROS2CAN.a")
 
 # FMT JEST ZE ŹRÓDŁA BO INACZEJ NIE DZIAŁA!!
 target_link_libraries(${PROJECT_NAME}_node PRIVATE "/usr/local/lib/libfmt.a")
