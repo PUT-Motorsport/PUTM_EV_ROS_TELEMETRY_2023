@@ -64,9 +64,8 @@ class Apps{
 };
 
 class Bms_Lv{
-    public:
-
-    std::string device_name = "BMSLV";
+    
+    private:
 
     Family<Gauge> &fam = {BuildGauge()
                         .Name("BMS_LV")
@@ -77,6 +76,10 @@ class Bms_Lv{
     Gauge& SoC         = {fam.Add({{"BMS_LV",        "SoC"}})};
     Gauge& Temperature = {fam.Add({{"BMS_LV","Temperature"}})};
     Gauge& Current     = {fam.Add({{"BMS_LV",    "Current"}})};
+
+    public:
+
+    std::string device_name = "BMSLV";
 
     AgentJson &device_logger     = {logger.registry.Add({{"Source", "PUTM_Telemetry"}, {"Device",device_name}})};
 
@@ -117,18 +120,28 @@ class Bms_Hv{
 
     public:
 
-    std::vector<std::string> bmshv_string_states {
-                "AIRs Opened",
-                "AIRs Closed", 
-                "Precharge On",
-                "Charger Connected",
-                "Battery unbalanced",
-                "Battery critically unbalanced",
-                "Voltage too low ",
-                "Voltage too high ",
-                "Temperature too high",
-                "Current to high"};
+    std::string device_name = "BMSHV";
+    AgentJson &device_logger     = {logger.registry.Add({{"Source", "PUTM_Telemetry"}, {"Device",device_name}})};
 
+    std::vector<std::string> ok_states {
+        "AIRs Opened",
+        "AIRs Closed", 
+        "Precharge On",
+        "Charger Connected",
+        };
+
+    std::vector<std::string> warning_states {
+        "Charger Connected",
+        "Battery unbalanced",
+        "Battery critically unbalanced",
+        };
+
+    std::vector<std::string> error_states {
+        "Voltage too low ",
+        "Voltage too high ",
+        "Temperature too high",
+        "Current to high"
+        };
     int current_state;
 
     void Update_metrics(PUTM_CAN::BMS_HV_main);
@@ -154,9 +167,6 @@ class Fuse{
 
 class AQ_Card{
     private:
-
-    std::string device_name = "AQ_Card";
-
     Family<Gauge>& AQ_FAM = {BuildGauge()
                         .Name("AQ_Card")
                         .Help("--")
@@ -172,12 +182,25 @@ class AQ_Card{
     Gauge& acc_x                   = {AQ_FAM.Add({{"AQ_Card","Acceleration front X"}})};
     Gauge& acc_y                   = {AQ_FAM.Add({{"AQ_Card","Acceleration front Y"}})};
     Gauge& acc_z                   = {AQ_FAM.Add({{"AQ_Card","Acceleration front Z"}})};
-    
+
+    public:
+ 
     AgentJson &device_logger     = {logger.registry.Add({{"Source", "PUTM_Telemetry"}, {"Device",device_name}})};
+
+    std::string device_name = "AQ_Card";
+
+    std::vector<std::string> ok_states {
+        "POWER_UP",
+        "NORMAL_OPERATION",};
+
+    std::vector<std::string> warning_states {
+        " SENSOR_IMPLOSIBILITY"};
+
+    std::vector<std::string> error_states {};
 
     uint8_t safety_last = 0;
     uint8_t safety_new = 0;
-     std::vector<std::string> safety_strings {
+    std::vector<std::string> safety_strings {
         "OVERTRAVEL",
         "LEFT_KILL",
         "RIGHT_KILL",
@@ -185,15 +208,6 @@ class AQ_Card{
         "DRIVER_KILL",
         "INERTIA",
         "EBS"
-        };
-
-    public:
-
-    std::vector<std::string> aq_string_states 
-        {
-            "POWER_UP",
-            "NORMAL_OPERATION",
-            "SENSOR_IMPLOSIBILITY"
         };
     
     int current_state;
