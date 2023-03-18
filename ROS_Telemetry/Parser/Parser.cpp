@@ -165,6 +165,7 @@ void CAN_Parser::Parser()
         {
             PUTM_CAN::SF_safety sfsafety;
             memcpy(&sfsafety, &frtmp.data, sizeof(frtmp.data));
+            fuse->Update_metrics(sfsafety);
         }
         break;
 

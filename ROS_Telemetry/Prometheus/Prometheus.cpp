@@ -33,6 +33,7 @@ void AQ_Card::Update_metrics(PUTM_CAN::AQ_main aq_main_frame)
     brake_pressure_front.Set(aq_main_frame.brake_pressure_front);
     brake_pressure_rear .Set(aq_main_frame.brake_pressure_back);
     Update_State(this, uint8_t(aq_main_frame.device_state));
+    Check_SC(this, uint8_t(aq_main_frame.safety_front));
 }
 
 void Bms_Lv::Update_metrics(PUTM_CAN::BMS_LV_main bmslv_frame)
@@ -103,6 +104,12 @@ void Fuse::Update_metrics(PUTM_CAN::SF_main sfmain_frame)
     
 
 }
+
+void Fuse::Update_metrics(PUTM_CAN::SF_safety sf_safety)
+{
+    //Check_SC(this, uint8_t(sf_safety));
+}
+
 
 void Traction_Control::Update_metrics(PUTM_CAN::TC_imu_acc tc_imu_acc_frame)
 {
