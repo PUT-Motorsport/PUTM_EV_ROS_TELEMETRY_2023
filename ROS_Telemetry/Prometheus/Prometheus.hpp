@@ -72,11 +72,19 @@ class Bms_Lv{
                         .Help("--")
                         .Register(*registry_prometheus)};
 
-    Gauge& Voltage     = {fam.Add({{"BMS_LV",    "Voltage"}})};
-    Gauge& SoC         = {fam.Add({{"BMS_LV",        "SoC"}})};
+    Gauge& Voltage     = {fam.Add({{"BMS_LV","Voltage"}})};
+    Gauge& SoC         = {fam.Add({{"BMS_LV","SoC"}})};
     Gauge& Temperature = {fam.Add({{"BMS_LV","Temperature"}})};
-    Gauge& Current     = {fam.Add({{"BMS_LV",    "Current"}})};
-
+    Gauge& Current     = {fam.Add({{"BMS_LV","Current"}})};
+    Gauge& cell_1_temp = {fam.Add({{"BMS_LV","Cell_1_Temp"}})};
+    Gauge& cell_2_temp = {fam.Add({{"BMS_LV","Cell_2_Temp"}})};
+    Gauge& cell_3_temp = {fam.Add({{"BMS_LV","Cell_3_Temp"}})};
+    Gauge& cell_4_temp = {fam.Add({{"BMS_LV","Cell_4_Temp"}})};
+    Gauge& cell_5_temp = {fam.Add({{"BMS_LV","Cell_5_Temp"}})};
+    Gauge& cell_6_temp = {fam.Add({{"BMS_LV","Cell_6_Temp"}})};
+    Gauge& cell_7_temp = {fam.Add({{"BMS_LV","Cell_7_Temp"}})};
+    Gauge& cell_8_temp = {fam.Add({{"BMS_LV","Cell_8_Temp"}})};
+    
     public:
 
     std::string device_name = "BMSLV";
@@ -159,9 +167,23 @@ class Fuse{
 
     public:
 
+    std::string device_name = "Smart_Fuses";
 
+    AgentJson &device_logger = {logger.registry.Add({{"Source", "PUTM_Telemetry"}, {"Device",device_name}})};
+
+    uint8_t safety_last = 0;
+    uint8_t safety_new = 0;
+
+    std::vector<std::string> safety_strings {
+        "TSMS",
+        "DV",
+        "INVERTER",
+        "HVD",
+        "FIREWALL"
+        };
     int current_state;
 
+    void Update_metrics(PUTM_CAN::SF_safety);
     void Update_metrics(PUTM_CAN::SF_main);
 };
 
@@ -219,6 +241,7 @@ class AQ_Card{
 
 class Traction_Control{
     private:
+
     Family<Gauge>& TC = {BuildGauge()
                         .Name("Tracion_Control")
                         .Help("--")
@@ -249,64 +272,30 @@ class Traction_Control{
 
     public:
 
-    std::vector<std::string> tc_string_states {
-                "Normal Operation",
-                "Power Up",
-                "APPS Timeout",
-                "APPS Invalid Value",
-                "APPS Skip Frame",
-                "Inverter Timeout",
-                "Inverter IPEAK"
-                };
+    AgentJson &device_logger     = {logger.registry.Add({{"Source", "PUTM_Telemetry"}, {"Device",device_name}})};
+
+    std::string device_name = "Traction_Control";
+
+
+    std::vector<std::string> ok_states {
+            "Normal Operation",
+            "Power Up",};
+
+    std::vector<std::string> warning_states {};
+
+    std::vector<std::string> error_states {
+            "APPS Timeout",
+            "APPS Invalid Value",
+            "APPS Skip Frame",
+            "Inverter Timeout",
+            "Inverter IPEAK"};
     
     void Update_metrics(PUTM_CAN::TC_imu_acc);
     void Update_metrics(PUTM_CAN::TC_imu_gyro);
     void Update_metrics(PUTM_CAN::TC_main);
-    void Update_metrics(PUTM_CAN::TC_wheel_velocities);    
+    void Update_metrics(PUTM_CAN::TC_wheel_velocities);   
+      void Update_metrics(PUTM_CAN::TC_rear_suspension);   
     void Update_metrics(PUTM_CAN::TC_temperatures);
-};
-
-/*
-class Shutdown_Circut_front{
-    public:
-
-    std::string device_name = "Shutdown_Circut_front";
-
-    AgentJson &device_logger     = {logger.registry.Add({{"Source", "PUTM_Telemetry"}, {"Device",device_name}})};
-
-    uint8_t safety_last = 0;
-    uint8_t safety_new = 0;
-     std::vector<std::string> safety_strings {
-        "OVERTRAVEL",
-        "LEFT_KILL",
-        "RIGHT_KILL",
-        "BSPD",
-        "DRIVER_KILL",
-        "INERTIA",
-        "EBS"
-        };
-     void Update_metrics(PUTM_CAN::AQ);
-};
-*/
-
-class Shutdown_Circut_rear{
-    public:
-
-    std::string device_name = "Shutdown_Circut_rear";
-
-    AgentJson &device_logger = {logger.registry.Add({{"Source", "PUTM_Telemetry"}, {"Device",device_name}})};
-
-    uint8_t safety_last = 0;
-    uint8_t safety_new = 0;
-
-    std::vector<std::string> safety_strings {
-        "TSMS",
-        "DV",
-        "INVERTER",
-        "HVD",
-        "FIREWALL"
-        };
-    void Update_metrics(PUTM_CAN::SF_safety);
 };
 
 class Time{
@@ -326,8 +315,6 @@ class Time{
             .Help("--")
             .Register(*registry_prometheus)};
 
-    public:
-
     Gauge& Acc_time =     {Times.Add({})};
     Gauge& Skidpad_time = {Times.Add({})};
     Gauge& Lap_Time =     {Times.Add({})};
@@ -335,8 +322,8 @@ class Time{
     Gauge& S2 =           {Times.Add({})};
     Gauge& S3 =           {Times.Add({})};
 
-    Time() = default;
-    ~Time(){}
+    public:
+
     void Set_Acc_Ignore_Boundaries(float upper, float lower) {
         Acc_lower = lower;
         Acc_upper = upper;}
@@ -347,12 +334,12 @@ class Time{
         SkidPad_lower = lower;
         SkidPad_upper = upper;}
 
+
     void Update_metrics(PUTM_CAN::Lap_timer_Acc_time);
     void Update_metrics(PUTM_CAN::Lap_timer_Lap_time);
     void Update_metrics(PUTM_CAN::Lap_timer_Main);
     void Update_metrics(PUTM_CAN::Lap_timer_Skidpad_time);
     void Update_metrics(PUTM_CAN::Lap_timer_Sector);
-    //void Update_metrics(PUTM_CAN::SF_safety);
 };
 
 }

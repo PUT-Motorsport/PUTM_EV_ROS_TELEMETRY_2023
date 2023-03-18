@@ -7,7 +7,6 @@ Data::Bms_Lv *lv = new Data::Bms_Lv();
 Data::Bms_Hv *hv = new Data::Bms_Hv();
 Data::Traction_Control *tc = new Data::Traction_Control();
 Data::Time *times = new Data::Time();
-Data::Shutdown_Circut_rear *rsh = new Data::Shutdown_Circut_rear();
 Data::Fuse *fuse = new Data::Fuse();
 
 namespace Parser{
@@ -96,11 +95,13 @@ void CAN_Parser::Parser()
         }
         break;
 
-        // case PUTM_CAN::BMS
-        // {
-            
-        // }
-        // break;
+        case PUTM_CAN::BMS_HV_MAIN_CAN_ID:
+        {
+            PUTM_CAN::BMS_HV_main bmshvmain;
+            memcpy(&bmshvmain, &frtmp.data, sizeof(frtmp.data));
+            hv->Update_metrics(bmshvmain); 
+        }
+        break;
 
         case PUTM_CAN::DASH_MAIN_CAN_ID:
         {
@@ -195,10 +196,9 @@ void CAN_Parser::Parser()
 
         case PUTM_CAN::TC_REAR_SUSPENSION_CAN_ID:
         {
-            // chyba nie ma struktury
-            // PUTM_CAN::TC_
-            // memcpy(&tc_main, &frtmp.data, sizeof(frtmp.data));
-            // tc->Update_metrics(tc_main);
+            PUTM_CAN::TC_rear_suspension tc_rear;
+            memcpy(&tc_rear, &frtmp.data, sizeof(frtmp.data));
+            tc->Update_metrics(tc_rear);
         }
         break;
 
@@ -223,19 +223,17 @@ void CAN_Parser::Parser()
 
         case PUTM_CAN::WHEELTEMP_MAIN_CAN_ID:
         {
-            //brak struktur.
-            // PUTM_CAN::Wheel
-            // // memcpy(&wh, &frtmp.data, sizeof(frtmp.data));
-            // // tc->Update_metrics(wh);
+            PUTM_CAN::WheelTemp_main wheel_tmp_main;
+            memcpy(&wheel_tmp_main, &frtmp.data, sizeof(frtmp.data));
+            // tc->Update_metrics(wh);
         }
         break;
 
 
         case PUTM_CAN::YAWPROBE_AIR_FLOW_CAN_ID:
         {
-            //same
-            // PUTM_CAN::Y ;
-            // memcpy(&tc_wheels, &frtmp.data, sizeof(frtmp.data));
+            PUTM_CAN::YawProbe_air_flow yawprobe;
+            memcpy(&yawprobe, &frtmp.data, sizeof(frtmp.data));
             // tc->Update_metrics(tc_wheels);
         }
         break;

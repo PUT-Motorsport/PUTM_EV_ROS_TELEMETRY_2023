@@ -37,16 +37,33 @@ void AQ_Card::Update_metrics(PUTM_CAN::AQ_main aq_main_frame)
 
 void Bms_Lv::Update_metrics(PUTM_CAN::BMS_LV_main bmslv_frame)
 {
-
-    
-
+    Voltage    .Set(bmslv_frame.voltage_sum);
+    SoC        .Set(bmslv_frame.soc);
+    Temperature.Set(bmslv_frame.temp_avg);
+    Current    .Set(bmslv_frame.current);
+    Update_State(this, uint8_t(bmslv_frame.device_state));
 }
 
 void Bms_Lv::Update_metrics(PUTM_CAN::BMS_LV_temperature bmslv_tmp_frame)
 {
+    cell_1_temp.Set(bmslv_tmp_frame.temp_1);
+    cell_2_temp.Set(bmslv_tmp_frame.temp_2);
+    cell_3_temp.Set(bmslv_tmp_frame.temp_3);
+    cell_4_temp.Set(bmslv_tmp_frame.temp_4);
+    cell_5_temp.Set(bmslv_tmp_frame.temp_5);
+    cell_6_temp.Set(bmslv_tmp_frame.temp_6);
+    cell_7_temp.Set(bmslv_tmp_frame.temp_7);
+    cell_8_temp.Set(bmslv_tmp_frame.temp_8);
+}
 
-    
-
+void Bms_Hv::Update_metrics(PUTM_CAN::BMS_HV_main bmshv_main_frame)
+{
+    Voltage        .Set(bmshv_main_frame.voltage_sum);
+    Current        .Set(bmshv_main_frame.current);
+    SoC            .Set(bmshv_main_frame.soc);
+    Temperature_max.Set(bmshv_main_frame.temp_max);
+    Temperature_avg.Set(bmshv_main_frame.temp_avg);
+    Update_State(this, uint8_t(bmshv_main_frame.device_state));
 }
 
 
@@ -89,44 +106,48 @@ void Fuse::Update_metrics(PUTM_CAN::SF_main sfmain_frame)
 
 void Traction_Control::Update_metrics(PUTM_CAN::TC_imu_acc tc_imu_acc_frame)
 {
-
-    
-
+    acc_x.Set(tc_imu_acc_frame.acc_x);
+    acc_y.Set(tc_imu_acc_frame.acc_y);
+    acc_z.Set(tc_imu_acc_frame.acc_z);
 }
 
 void Traction_Control::Update_metrics(PUTM_CAN::TC_imu_gyro tc_imu_gyro_frame)
 {
+    gyro_x.Set(tc_imu_gyro_frame.gyro_x);
+    gyro_y.Set(tc_imu_gyro_frame.gyro_y);
+    gyro_z.Set(tc_imu_gyro_frame.gyro_z);
+}
 
-    
-
+void Traction_Control::Update_metrics(PUTM_CAN::TC_rear_suspension tc_rear_suspension)
+{
+    suspension_rear_left .Set(tc_rear_suspension.adc_susp_left);  
+    suspension_rear_right.Set(tc_rear_suspension.adc_susp_right);  
 }
 
 void Traction_Control::Update_metrics(PUTM_CAN::TC_main tc_main_frame)
 {
-
-    
-
+    vehicle_speed.Set(tc_main_frame.vehicle_speed);
+    motor_current.Set(tc_main_frame.motor_current);
+    motor_speed  .Set(tc_main_frame.engine_speed);
+    tc_intensity .Set(tc_main_frame.traction_control_intensivity);
 }
-
-// void Traction_Control::Update_metrics(PUTM_CAN::TC_main tc_main_frame)
-// {
-
-    
-
-// }
 
 void Traction_Control::Update_metrics(PUTM_CAN::TC_temperatures tc_temperatures_frame)
 {
-
-    
-
+    temp_engine   .Set(tc_temperatures_frame.engine);   
+    temp_inverter .Set(tc_temperatures_frame.inverter);   
+    water_p_in    .Set(tc_temperatures_frame.water_pressure_in);   
+    water_p_out   .Set(tc_temperatures_frame.water_pressure_out);   
+    temp_water_in .Set(tc_temperatures_frame.water_temp_in);   
+    temp_water_out.Set(tc_temperatures_frame.water_temp_out);  
 }
 
 void Traction_Control::Update_metrics(PUTM_CAN::TC_wheel_velocities tc_wheels_frames)
 {
-
-    
-
+    wheel_front_left .Set(tc_wheels_frames.left_front);
+    wheel_front_right.Set(tc_wheels_frames.right_front);
+    wheel_rear_left  .Set(tc_wheels_frames.left_rear);
+    wheel_rear_right .Set(tc_wheels_frames.right_rear);
 }
 
 
