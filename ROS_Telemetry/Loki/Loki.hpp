@@ -1,5 +1,6 @@
 #pragma once 
 #include "loki/builder.hpp"
+#include <iostream>
 
 using namespace loki;
 
@@ -39,21 +40,20 @@ void Update_State(T object, int newstate)
 {
     if(newstate != object->current_state)
     {
-        if(newstate <= object->ok_states.size())
+        if(newstate < (object->ok_states.size()))
         {
             //push info
-            logger.Push_Info(&object->device_logger, object->device_name, object->ok_states[newstate]);
-            
+            logger.Push_Info(&object->device_logger, object->device_name, object->ok_states[newstate%(object->ok_states.size())]);
         }
-        else if((newstate > object->ok_states.size()) && (newstate <= (object->ok_states.size() + object->warning_states.size())))
+        else if((newstate >= object->ok_states.size()) && (newstate < ((object->ok_states.size()) + (object->warning_states.size()))))
         {
             //push warning
-            logger.Push_Warning(&object->device_logger, object->device_name, object->warning_states[newstate]);
+            logger.Push_Warning(&object->device_logger, object->device_name, object->warning_states[newstate-object->ok_states.size()]);
         }
         else
         {
             //push error
-            logger.Push_Error(&object->device_logger, object->device_name, object->error_states[newstate]);
+            logger.Push_Error(&object->device_logger, object->device_name, object->error_states[newstate-(object->ok_states.size() + object->warning_states.size())]);
         }
     }
     object->current_state = newstate;

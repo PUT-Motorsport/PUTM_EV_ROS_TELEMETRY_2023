@@ -294,7 +294,7 @@ class Traction_Control{
     void Update_metrics(PUTM_CAN::TC_imu_gyro);
     void Update_metrics(PUTM_CAN::TC_main);
     void Update_metrics(PUTM_CAN::TC_wheel_velocities);   
-      void Update_metrics(PUTM_CAN::TC_rear_suspension);   
+    void Update_metrics(PUTM_CAN::TC_rear_suspension);   
     void Update_metrics(PUTM_CAN::TC_temperatures);
 };
 
@@ -323,6 +323,26 @@ class Time{
     Gauge& S3 =           {Times.Add({})};
 
     public:
+
+    std::string device_name = "Lap_Timer";
+    AgentJson &device_logger = {logger.registry.Add({{"Source", "PUTM_Telemetry"}, {"Device",device_name}})};
+    int current_state;
+
+    std::vector<std::string> ok_states {
+        "Normal Operation",
+        "Detected_Startfinish",
+	    "Detected_Sector2Skid",
+	    "Detected_Sector3Acc"};
+
+    std::vector<std::string> warning_states {
+        "Startfinish_battery_low",
+	    "Sector_2_battery_low",	// Warning
+	    "Sector_3_battery_low",	// Warning
+	    "Missed_detection",	// Warning
+        "Timeout"
+    };
+    std::vector<std::string> error_states {
+        "Error"};
 
     void Set_Acc_Ignore_Boundaries(float upper, float lower) {
         Acc_lower = lower;

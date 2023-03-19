@@ -17,11 +17,11 @@ class CAN_Parser{
     //Can handler
     PUTM_CAN::CAN can;
     //buffer for frames
-    std::queue<can_frame> frame_buffer;
+    //std::queue<can_frame> frame_buffer;
     //mutex
     std::mutex frame_buffer_mutex;
     public:
-
+    std::queue<can_frame> frame_buffer;
     enum STATE{
         OK,
         ERROR

@@ -19,6 +19,7 @@ void Run()
     while(true)
     {
         parsing_handler.Push();
+        //std::cout << parsing_handler.frame_buffer.size() << std::endl;
     }
 }
 
@@ -133,7 +134,9 @@ void CAN_Parser::Parser()
 
         case PUTM_CAN::LAP_TIMER_MAIN_CAN_ID:
         {
-
+            PUTM_CAN::Lap_timer_Main laptimermain;
+            memcpy(&laptimermain, &frtmp.data, sizeof(frtmp.data));
+            times->Update_metrics(laptimermain);
         }
         break;
 

@@ -1,4 +1,7 @@
 #include "Prometheus.hpp"
+#include <iostream>
+#include <string> 
+using namespace std;
 
 using namespace Data;
 
@@ -33,12 +36,12 @@ void AQ_Card::Update_metrics(PUTM_CAN::AQ_main aq_main_frame)
     brake_pressure_front.Set(aq_main_frame.brake_pressure_front);
     brake_pressure_rear .Set(aq_main_frame.brake_pressure_back);
     Update_State(this, uint8_t(aq_main_frame.device_state));
-    Check_SC(this, uint8_t(aq_main_frame.safety_front));
+    //Check_SC(this, uint8_t(aq_main_frame.safety_front));
 }
 
 void Bms_Lv::Update_metrics(PUTM_CAN::BMS_LV_main bmslv_frame)
 {
-    Voltage    .Set(bmslv_frame.voltage_sum);
+    Voltage    .Set(static_cast<float>(bmslv_frame.voltage_sum)/100);
     SoC        .Set(bmslv_frame.soc);
     Temperature.Set(bmslv_frame.temp_avg);
     Current    .Set(bmslv_frame.current);
@@ -78,9 +81,15 @@ void Time::Update_metrics(PUTM_CAN::Lap_timer_Acc_time laptimer_acc_frame)
 
 void Time::Update_metrics(PUTM_CAN::Lap_timer_Lap_time laptimer_lap_frame)
 {
+    Lap_Time.Set(laptimer_lap_frame.Lap_time);
 
-    
+    uint8_t minutes = laptimer_lap_frame.Lap_time/60000;
+    uint8_t seconds  = (laptimer_lap_frame.Lap_time/1000) - minutes*60;
+    uint32_t miliseconds = laptimer_lap_frame.Lap_time - seconds*1000;
 
+    string message = "Lap time: " + to_string(minutes) + ":" + to_string(seconds) + ":" + to_string(miliseconds);
+    logger.Push_Info(&this->device_logger, device_name, message);
+    Update_State(this, uint8_t(laptimer_lap_frame.device_state));
 }
 
 void Time::Update_metrics(PUTM_CAN::Lap_timer_Sector laptimer_sec_frame)
@@ -92,9 +101,15 @@ void Time::Update_metrics(PUTM_CAN::Lap_timer_Sector laptimer_sec_frame)
 
 void Time::Update_metrics(PUTM_CAN::Lap_timer_Skidpad_time laptimer_skid_frame)
 {
+    
 
     
 
+}
+
+void Time::Update_metrics(PUTM_CAN::Lap_timer_Main laptimer_main_frame)
+{
+    Update_State(this, uint8_t(laptimer_main_frame.device_state));
 }
 
 
