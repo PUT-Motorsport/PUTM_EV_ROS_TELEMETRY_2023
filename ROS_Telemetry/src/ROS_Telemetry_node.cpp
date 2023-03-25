@@ -1,9 +1,11 @@
 #include <iostream>
 #include <ros/ros.h>
+#include <thread>
 #include "../Prometheus/Prometheus.hpp"
 #include "../Prometheus/Communication.hpp"
 #include "../Parser/Parser.hpp"
 #include "../Loki/Loki.hpp"
+
 
 std::shared_ptr<prometheus::Registry> registry_prometheus = std::make_shared<prometheus::Registry>();
 
@@ -15,6 +17,8 @@ int main(int argc, char *argv[])
     exposer.RegisterCollectable(registry_prometheus);
 
     ROS_INFO("Prometheus Online.");
+
+    std::thread Read(Read_Terminal_async);
  
     logger.Push_Info(&logger.Telemetry_logger, "Telemetry", "Telemetry online!");
 

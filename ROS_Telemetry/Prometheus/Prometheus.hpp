@@ -76,14 +76,14 @@ class Bms_Lv{
     Gauge& SoC         = {fam.Add({{"BMS_LV","SoC"}})};
     Gauge& Temperature = {fam.Add({{"BMS_LV","Temperature"}})};
     Gauge& Current     = {fam.Add({{"BMS_LV","Current"}})};
-    Gauge& cell_1_temp = {fam.Add({{"BMS_LV","Cell_1_Temp"}})};
-    Gauge& cell_2_temp = {fam.Add({{"BMS_LV","Cell_2_Temp"}})};
-    Gauge& cell_3_temp = {fam.Add({{"BMS_LV","Cell_3_Temp"}})};
-    Gauge& cell_4_temp = {fam.Add({{"BMS_LV","Cell_4_Temp"}})};
-    Gauge& cell_5_temp = {fam.Add({{"BMS_LV","Cell_5_Temp"}})};
-    Gauge& cell_6_temp = {fam.Add({{"BMS_LV","Cell_6_Temp"}})};
-    Gauge& cell_7_temp = {fam.Add({{"BMS_LV","Cell_7_Temp"}})};
-    Gauge& cell_8_temp = {fam.Add({{"BMS_LV","Cell_8_Temp"}})};
+    Gauge& cell_1_temp = {fam.Add({{"BMS_LV","Cells_Temperature"}})};
+    Gauge& cell_2_temp = {fam.Add({{"BMS_LV","Cells_Temperature"}})};
+    Gauge& cell_3_temp = {fam.Add({{"BMS_LV","Cells_Temperature"}})};
+    Gauge& cell_4_temp = {fam.Add({{"BMS_LV","Cells_Temperature"}})};
+    Gauge& cell_5_temp = {fam.Add({{"BMS_LV","Cells_Temperature"}})};
+    Gauge& cell_6_temp = {fam.Add({{"BMS_LV","Cells_Temperature"}})};
+    Gauge& cell_7_temp = {fam.Add({{"BMS_LV","Cells_Temperature"}})};
+    Gauge& cell_8_temp = {fam.Add({{"BMS_LV","Cells_Temperature"}})};
     
     public:
 
