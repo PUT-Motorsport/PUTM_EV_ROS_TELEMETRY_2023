@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 #include "Communication.hpp"
+#include "../PUTM_DV_CAN_LIBRARY/Inc/putm_can_interface.hpp"
 
 Communication::semafora s1;
 Communication::variable_labels labels{"Practice", "default", "Dry"};
@@ -96,6 +97,15 @@ void Read_Terminal_async()
         {
             Set_Condition();
             s1.change = true;
+        }
+        else if(input == "power")
+        {
+            PUTM_CAN::CAN can;
+            can.connect();
+            PUTM_CAN::SF_Power_Cycle pwr{
+                .power_cycle = true
+            };
+            can.transmit(pwr);
         }
     }
 }
