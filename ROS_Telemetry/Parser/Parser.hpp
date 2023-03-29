@@ -20,6 +20,7 @@ class CAN_Parser{
     //std::queue<can_frame> frame_buffer;
     //mutex
     std::mutex frame_buffer_mutex;
+
     public:
     std::queue<can_frame> frame_buffer;
     enum STATE{
@@ -40,6 +41,7 @@ class CAN_Parser{
         }
     }
     //parser ze switch case. pobiera ramkę z bufora i updateuje metryki.
+
     void Start();
 
     void inline Push()

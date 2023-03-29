@@ -1,18 +1,25 @@
 #include "Prometheus.hpp"
+#include "Communication.hpp"
+#include "../Parser/Parser.hpp"
 #include <iostream>
 #include <string> 
-using namespace std;
 
 using namespace Data;
 
+extern Communication::RosComs rosDataHandler;
 
 void Apps::Update_metrics(PUTM_CAN::Apps_main apps_frame)
 {
+    //Prometheus
     Counter.Set(apps_frame.counter);
     Difference.Set(apps_frame.position_diff);
     Pedal_Position.Set(apps_frame.pedal_position);
     std::cout << int(apps_frame.counter) << std::endl;
     Update_State(this, uint8_t(apps_frame.device_state));
+    //ROS
+    rosDataHandler.appsROS.pedalPosition = apps_frame.pedal_position;
+    rosDataHandler.appsROS.difference = apps_frame.position_diff;
+    rosDataHandler.appsPublisher.publish(rosDataHandler.appsROS);
 }
 
 void AQ_Card::Update_metrics(PUTM_CAN::AQ_acceleration aq_acc_frame)
@@ -77,7 +84,7 @@ void Time::Update_metrics(PUTM_CAN::Lap_timer_Acc_time laptimer_acc_frame)
 
     uint8_t seconds  = (laptimer_acc_frame.Acc_Time/1000);
     uint32_t miliseconds = laptimer_acc_frame.Acc_Time - seconds*1000;
-    string message = "Lap time: " + to_string(seconds) + ":" + to_string(miliseconds);
+    std::string message = "Lap time: " + std::to_string(seconds) + ":" + std::to_string(miliseconds);
     logger.Push_Debug(&this->device_logger, device_name, message);
     Update_State(this, uint8_t(laptimer_acc_frame.device_state));
 }
@@ -90,7 +97,7 @@ void Time::Update_metrics(PUTM_CAN::Lap_timer_Lap_time laptimer_lap_frame)
     uint8_t seconds  = (laptimer_lap_frame.Lap_time/1000) - minutes*60;
     uint32_t miliseconds = laptimer_lap_frame.Lap_time - seconds*1000;
 
-    string message = "Lap time: " + to_string(minutes) + ":" + to_string(seconds) + ":" + to_string(miliseconds);
+    std::string message = "Lap time: " + std::to_string(minutes) + ":" + std::to_string(seconds) + ":" + std::to_string(miliseconds);
     logger.Push_Debug(&this->device_logger, device_name, message);
     Update_State(this, uint8_t(laptimer_lap_frame.device_state));
 }

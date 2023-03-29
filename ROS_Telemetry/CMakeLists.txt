@@ -20,6 +20,7 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
   message_generation
+  genmsg
 )
 
 find_package(Boost REQUIRED COMPONENTS system)
@@ -57,6 +58,17 @@ find_package(Boost REQUIRED COMPONENTS system)
 ##   * uncomment the generate_messages entry below
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
+add_message_files(
+  DIRECTORY
+  msg
+  FILES
+  APPSKURWAKOZA.msg
+  BMSLV.msg
+  BMSHV.msg
+  AQ_CARD.msg
+  TC.msg
+ )
+
 ## Generate services in the 'srv' folder
 # add_service_files(
 #   FILES
@@ -71,7 +83,7 @@ find_package(Boost REQUIRED COMPONENTS system)
 #   Action2.action
 # )
 
-generate_messages(DEPENDENCIES std_msgs)
+generate_messages(DEPENDENCIES std_msgs )
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
