@@ -102,10 +102,10 @@ void Read_Terminal_async()
         {
             PUTM_CAN::CAN can;
             can.connect();
-            PUTM_CAN::SF_Power_Cycle pwr{
-                .power_cycle = true
-            };
-            can.transmit(pwr);
+            // PUTM_CAN::SF_Power_Cycle pwr{
+            //     .power_cycle = true
+            // };
+            //can.transmit(pwr);
         }
     }
 }

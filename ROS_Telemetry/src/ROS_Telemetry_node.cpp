@@ -12,8 +12,6 @@ std::shared_ptr<prometheus::Registry> registry_prometheus = std::make_shared<pro
 
 Tlogs logger;
 
-Communication::RosComs *rosDataHandler;
-
 int main(int argc, char *argv[])
 {  
     Exposer exposer{"127.0.0.1:8081"};
@@ -26,8 +24,6 @@ int main(int argc, char *argv[])
     logger.Push_Info(&logger.Telemetry_logger, "Telemetry", "Telemetry online!");
 
     ros::init(argc, argv, "Telemetry");
-
-    rosDataHandler = new Communication::RosComs();
 
     Parser::Run();
 

@@ -15,23 +15,16 @@ void Apps::Update_metrics(PUTM_CAN::Apps_main apps_frame)
     Difference.Set(apps_frame.position_diff);
     Pedal_Position.Set(apps_frame.pedal_position);
     Update_State(this, uint8_t(apps_frame.device_state));
-    //ROS
-    rosDataHandler.appsROS.pedalPosition = apps_frame.pedal_position;
-    rosDataHandler.appsROS.difference = apps_frame.position_diff;
-    rosDataHandler.appsPublisher.publish(rosDataHandler.appsROS);
+
+    ros::
 }
+
 
 void AQ_Card::Update_metrics(PUTM_CAN::AQ_acceleration aq_acc_frame)
 {
     acc_x.Set(aq_acc_frame.acc_x);
     acc_y.Set(aq_acc_frame.acc_y);
     acc_z.Set(aq_acc_frame.acc_z);
-
-    rosDataHandler.aqCardROS.accX = aq_acc_frame.acc_x;
-    rosDataHandler.aqCardROS.accY = aq_acc_frame.acc_y;
-    rosDataHandler.aqCardROS.accZ = aq_acc_frame.acc_z;
-
-    rosDataHandler.aqPublisher.publish(rosDataHandler.aqCardROS);
 }
 
 void AQ_Card::Update_metrics(PUTM_CAN::AQ_gyroscope aq_gyro_frame)
@@ -39,12 +32,6 @@ void AQ_Card::Update_metrics(PUTM_CAN::AQ_gyroscope aq_gyro_frame)
     speed_x.Set(aq_gyro_frame.speed_x);
     speed_y.Set(aq_gyro_frame.speed_y);
     speed_z.Set(aq_gyro_frame.speed_z);
-
-    rosDataHandler.aqCardROS.gyroX = aq_gyro_frame.speed_x;
-    rosDataHandler.aqCardROS.gyroY = aq_gyro_frame.speed_y;
-    rosDataHandler.aqCardROS.gyroZ = aq_gyro_frame.speed_z;
-
-    rosDataHandler.aqPublisher.publish(rosDataHandler.aqCardROS);
 }
 
 void AQ_Card::Update_metrics(PUTM_CAN::AQ_main aq_main_frame)
@@ -55,13 +42,6 @@ void AQ_Card::Update_metrics(PUTM_CAN::AQ_main aq_main_frame)
     brake_pressure_rear .Set(aq_main_frame.brake_pressure_back);
     Update_State(this, uint8_t(aq_main_frame.device_state));
     //Check_SC(this, uint8_t(aq_main_frame.safety_front));
-
-    rosDataHandler.aqCardROS.brakePressureFront   = aq_main_frame.brake_pressure_front;
-    rosDataHandler.aqCardROS.brakePressureRear    = aq_main_frame.brake_pressure_back;
-    rosDataHandler.aqCardROS.suspensionLeftFront  = aq_main_frame.suspension_left;
-    rosDataHandler.aqCardROS.suspensionRightFront = aq_main_frame.suspension_right;
-
-    rosDataHandler.aqPublisher.publish(rosDataHandler.aqCardROS);
 }
 
 void Bms_Lv::Update_metrics(PUTM_CAN::BMS_LV_main bmslv_frame)
@@ -71,13 +51,6 @@ void Bms_Lv::Update_metrics(PUTM_CAN::BMS_LV_main bmslv_frame)
     Temperature.Set(bmslv_frame.temp_avg);
     Current    .Set(bmslv_frame.current);
     Update_State(this, uint8_t(bmslv_frame.device_state));
-
-    rosDataHandler.bmsLvROS.lvVoltage = bmslv_frame.voltage_sum;
-    rosDataHandler.bmsLvROS.soc = bmslv_frame.soc;
-    rosDataHandler.bmsLvROS.averageTemperature = bmslv_frame.temp_avg;
-    rosDataHandler.bmsLvROS.current = bmslv_frame.current;
-
-    rosDataHandler.lvPublisher.publish(rosDataHandler.bmsLvROS);
 }
 
 void Bms_Lv::Update_metrics(PUTM_CAN::BMS_LV_temperature bmslv_tmp_frame)
@@ -100,14 +73,6 @@ void Bms_Hv::Update_metrics(PUTM_CAN::BMS_HV_main bmshv_main_frame)
     Temperature_max.Set(bmshv_main_frame.temp_max);
     Temperature_avg.Set(bmshv_main_frame.temp_avg);
     Update_State(this, uint8_t(bmshv_main_frame.device_state));
-
-    rosDataHandler.bmsHvROS.hvVoltage = bmshv_main_frame.voltage_sum;
-    rosDataHandler.bmsHvROS.current = bmshv_main_frame.current;
-    rosDataHandler.bmsHvROS.soc = bmshv_main_frame.soc;
-    rosDataHandler.bmsHvROS.maxTemperature = bmshv_main_frame.temp_max;
-    rosDataHandler.bmsHvROS.averageTemperature = bmshv_main_frame.temp_avg;
-
-    rosDataHandler.hvPublisher.publish(rosDataHandler.bmsHvROS);
 }
 
 
