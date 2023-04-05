@@ -1,18 +1,26 @@
 #include "Parser.hpp"
 #include "../Prometheus/Prometheus.hpp"
 
-Data::Apps *apps = new Data::Apps();
-Data::AQ_Card *aq = new Data::AQ_Card();
-Data::Bms_Lv *lv = new Data::Bms_Lv();
-Data::Bms_Hv *hv = new Data::Bms_Hv();
-Data::Traction_Control *tc = new Data::Traction_Control();
-Data::Time *times = new Data::Time();
-Data::Fuse *fuse = new Data::Fuse();
+Data::Apps             *apps ;
+Data::AQ_Card          *aq   ; 
+Data::Bms_Lv           *lv   ; 
+Data::Bms_Hv           *hv   ; 
+Data::Traction_Control *tc   ; 
+Data::Time             *times; 
+Data::Fuse             *fuse ; 
 
 namespace Parser{
 
 void Run()
 {
+    apps =   new Data::Apps();
+    aq   =     new Data::AQ_Card();
+    lv   =     new Data::Bms_Lv();
+    hv   =     new Data::Bms_Hv();
+    tc   =     new Data::Traction_Control();
+    times=  new Data::Time();
+    fuse =   new Data::Fuse();
+
     CAN_Parser parsing_handler;
     parsing_handler.Start();
     if(parsing_handler.state == CAN_Parser::ERROR) {return;}

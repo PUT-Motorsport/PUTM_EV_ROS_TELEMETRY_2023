@@ -20,6 +20,13 @@
 
 #include "../PUTM_DV_CAN_LIBRARY/Inc/putm_can_interface.hpp"
 
+#include <ros/ros.h>
+#include "ROS_Telemetry/APPSKURWAKOZA.h"
+#include "ROS_Telemetry/AQ_CARD.h"
+#include "ROS_Telemetry/BMSHV.h"
+#include "ROS_Telemetry/BMSLV.h"
+#include "ROS_Telemetry/TC.h"
+
 using namespace prometheus;
 
 extern std::shared_ptr<prometheus::Registry> registry_prometheus;
@@ -84,8 +91,12 @@ class Bms_Lv{
     Gauge& cell_6_temp = {fam.Add({{"BMS_LV","Cells_Temperature"}})};
     Gauge& cell_7_temp = {fam.Add({{"BMS_LV","Cells_Temperature"}})};
     Gauge& cell_8_temp = {fam.Add({{"BMS_LV","Cells_Temperature"}})};
+
+    ros::NodeHandle nd;
     
     public:
+
+    ros::Publisher lvPublisher   = nd.advertise<ROS_Telemetry::BMSLV>  ("BMSLV_Data", 5);
 
     std::string device_name = "BMSLV";
 
@@ -205,7 +216,11 @@ class AQ_Card{
     Gauge& acc_y                   = {AQ_FAM.Add({{"AQ_Card","Acceleration front Y"}})};
     Gauge& acc_z                   = {AQ_FAM.Add({{"AQ_Card","Acceleration front Z"}})};
 
+    ros::NodeHandle nd;
+
     public:
+
+    ros::Publisher aqPublisher = nd.advertise<ROS_Telemetry::AQ_CARD> ("AQ_Card_Data", 1);    
  
     AgentJson &device_logger     = {logger.registry.Add({{"Source", "PUTM_Telemetry"}, {"Device",device_name}})};
 
