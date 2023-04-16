@@ -6,8 +6,6 @@
 
 using namespace Data;
 
-extern Communication::RosComs rosDataHandler;
-
 void Apps::Update_metrics(PUTM_CAN::Apps_main apps_frame)
 {
     //Prometheus
@@ -15,17 +13,6 @@ void Apps::Update_metrics(PUTM_CAN::Apps_main apps_frame)
     Difference.Set(apps_frame.position_diff);
     Pedal_Position.Set(apps_frame.pedal_position);
     Update_State(this, uint8_t(apps_frame.device_state));
-
-    ros::NodeHandle nd;
-    ros::Publisher appsPublisher = nd.advertise<ROS_Telemetry::APPSKURWAKOZA> ("APPS_Data", 1);
-    ROS_Telemetry::APPSKURWAKOZA appsROS;
-
-    appsROS.counter = apps_frame.counter;
-    appsROS.difference = apps_frame.position_diff;
-    appsROS.pedalPosition = apps_frame.pedal_position;
-
-    appsPublisher.publish(appsROS);
-
 }
 
 
@@ -34,14 +21,6 @@ void AQ_Card::Update_metrics(PUTM_CAN::AQ_acceleration aq_acc_frame)
     acc_x.Set(aq_acc_frame.acc_x);
     acc_y.Set(aq_acc_frame.acc_y);
     acc_z.Set(aq_acc_frame.acc_z);
-
-    ROS_Telemetry::AQ_CARD aqCardROS;   
-
-    aqCardROS.accX = aq_acc_frame.acc_x;
-    aqCardROS.accY = aq_acc_frame.acc_y;
-    aqCardROS.accZ = aq_acc_frame.acc_z;
-
-    aqPublisher.publish(aqCardROS);
 }
 
 void AQ_Card::Update_metrics(PUTM_CAN::AQ_gyroscope aq_gyro_frame)
@@ -68,15 +47,6 @@ void Bms_Lv::Update_metrics(PUTM_CAN::BMS_LV_main bmslv_frame)
     Temperature.Set(bmslv_frame.temp_avg);
     Current    .Set(bmslv_frame.current);
     Update_State(this, uint8_t(bmslv_frame.device_state));
-
-    ROS_Telemetry::BMSLV bmsLvROS;
-
-    bmsLvROS.averageTemperature = bmslv_frame.temp_avg;
-    bmsLvROS.current = bmslv_frame.current;
-    bmsLvROS.lvVoltage = bmslv_frame.voltage_sum;
-    bmsLvROS.soc = bmslv_frame.soc;
-
-    lvPublisher.publish(bmsLvROS);
 }
 
 void Bms_Lv::Update_metrics(PUTM_CAN::BMS_LV_temperature bmslv_tmp_frame)
@@ -186,6 +156,7 @@ void Traction_Control::Update_metrics(PUTM_CAN::TC_main tc_main_frame)
     motor_current.Set(tc_main_frame.motor_current);
     motor_speed  .Set(tc_main_frame.engine_speed);
     tc_intensity .Set(tc_main_frame.traction_control_intensivity);
+    Update_State(this, (uint8_t)(tc_main_frame.device_state));
 }
 
 void Traction_Control::Update_metrics(PUTM_CAN::TC_temperatures tc_temperatures_frame)

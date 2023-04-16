@@ -1,26 +1,18 @@
 #include "Parser.hpp"
 #include "../Prometheus/Prometheus.hpp"
 
-Data::Apps             *apps ;
-Data::AQ_Card          *aq   ; 
-Data::Bms_Lv           *lv   ; 
-Data::Bms_Hv           *hv   ; 
-Data::Traction_Control *tc   ; 
-Data::Time             *times; 
-Data::Fuse             *fuse ; 
+Data::Apps             apps ;
+Data::AQ_Card          aq   ; 
+Data::Bms_Lv           lv   ; 
+Data::Bms_Hv           hv   ; 
+Data::Traction_Control tc   ; 
+Data::Time             times; 
+Data::Fuse             fuse ; 
 
 namespace Parser{
 
 void Run()
 {
-    apps =   new Data::Apps();
-    aq   =     new Data::AQ_Card();
-    lv   =     new Data::Bms_Lv();
-    hv   =     new Data::Bms_Hv();
-    tc   =     new Data::Traction_Control();
-    times=  new Data::Time();
-    fuse =   new Data::Fuse();
-
     CAN_Parser parsing_handler;
     parsing_handler.Start();
     if(parsing_handler.state == CAN_Parser::ERROR) {return;}
@@ -52,7 +44,7 @@ void CAN_Parser::Parser()
         {
             PUTM_CAN::Apps_main appstmp;
             memcpy(&appstmp, &frtmp.data, sizeof(frtmp.data));
-            apps->Update_metrics(appstmp);
+            apps.Update_metrics(appstmp);
         }
         break;
 
@@ -60,7 +52,7 @@ void CAN_Parser::Parser()
         {
             PUTM_CAN::AQ_acceleration aqacctmp;
             memcpy(&aqacctmp, &frtmp.data, sizeof(frtmp.data));
-            aq->Update_metrics(aqacctmp);
+            aq.Update_metrics(aqacctmp);
         }
         break;
 
@@ -68,7 +60,7 @@ void CAN_Parser::Parser()
         {
             PUTM_CAN::AQ_gyroscope aqgytmp;
             memcpy(&aqgytmp, &frtmp.data, sizeof(frtmp.data));
-            aq->Update_metrics(aqgytmp);
+            aq.Update_metrics(aqgytmp);
         }
         break;
         
@@ -76,7 +68,7 @@ void CAN_Parser::Parser()
         {
             PUTM_CAN::AQ_main aqtmp;
             memcpy(&aqtmp, &frtmp.data, sizeof(frtmp.data));
-            aq->Update_metrics(aqtmp);
+            aq.Update_metrics(aqtmp);
         }
         break;
 
@@ -84,7 +76,7 @@ void CAN_Parser::Parser()
         {
             PUTM_CAN::AQ_main aqtmp;
             memcpy(&aqtmp, &frtmp.data, sizeof(frtmp.data));
-            aq->Update_metrics(aqtmp);
+            aq.Update_metrics(aqtmp);
         }
         break;
 
@@ -92,7 +84,7 @@ void CAN_Parser::Parser()
         {
             PUTM_CAN::BMS_LV_main bmslv;
             memcpy(&bmslv, &frtmp.data, sizeof(frtmp.data));
-            lv->Update_metrics(bmslv);
+            lv.Update_metrics(bmslv);
         }
         break;
 
@@ -100,7 +92,7 @@ void CAN_Parser::Parser()
         {
             PUTM_CAN::BMS_LV_temperature bmslvtemps;
             memcpy(&bmslvtemps, &frtmp.data, sizeof(frtmp.data));
-            lv->Update_metrics(bmslvtemps);
+            lv.Update_metrics(bmslvtemps);
         }
         break;
 
@@ -108,7 +100,7 @@ void CAN_Parser::Parser()
         {
             PUTM_CAN::BMS_HV_main bmshvmain;
             memcpy(&bmshvmain, &frtmp.data, sizeof(frtmp.data));
-            hv->Update_metrics(bmshvmain); 
+            hv.Update_metrics(bmshvmain); 
         }
         break;
 
@@ -128,7 +120,7 @@ void CAN_Parser::Parser()
         {
             PUTM_CAN::Lap_timer_Acc_time laptimeracc;
             memcpy(&laptimeracc, &frtmp.data, sizeof(frtmp.data));
-            times->Update_metrics(laptimeracc);
+            times.Update_metrics(laptimeracc);
         }
         break;
 
@@ -136,7 +128,7 @@ void CAN_Parser::Parser()
         {
             PUTM_CAN::Lap_timer_Lap_time laptimerlap;
             memcpy(&laptimerlap, &frtmp.data, sizeof(frtmp.data));
-            times->Update_metrics(laptimerlap);
+            times.Update_metrics(laptimerlap);
         }
         break;
 
@@ -144,7 +136,7 @@ void CAN_Parser::Parser()
         {
             PUTM_CAN::Lap_timer_Main laptimermain;
             memcpy(&laptimermain, &frtmp.data, sizeof(frtmp.data));
-            times->Update_metrics(laptimermain);
+            times.Update_metrics(laptimermain);
         }
         break;
 
@@ -152,7 +144,7 @@ void CAN_Parser::Parser()
         {
             PUTM_CAN::Lap_timer_Lap_time laptimersec;
             memcpy(&laptimersec, &frtmp.data, sizeof(frtmp.data));
-            times->Update_metrics(laptimersec);
+            times.Update_metrics(laptimersec);
         }
         break;
 
@@ -160,7 +152,7 @@ void CAN_Parser::Parser()
         {
             PUTM_CAN::Lap_timer_Lap_time laptimerskid;
             memcpy(&laptimerskid, &frtmp.data, sizeof(frtmp.data));
-            times->Update_metrics(laptimerskid);
+            times.Update_metrics(laptimerskid);
         }
         break;
 
@@ -168,7 +160,7 @@ void CAN_Parser::Parser()
         {
             PUTM_CAN::SF_main sfmain;
             memcpy(&sfmain, &frtmp.data, sizeof(frtmp.data));
-            fuse->Update_metrics(sfmain);
+            fuse.Update_metrics(sfmain);
         }
         break;
 
@@ -176,7 +168,7 @@ void CAN_Parser::Parser()
         {
             PUTM_CAN::SF_safety sfsafety;
             memcpy(&sfsafety, &frtmp.data, sizeof(frtmp.data));
-            fuse->Update_metrics(sfsafety);
+            fuse.Update_metrics(sfsafety);
         }
         break;
 
@@ -184,7 +176,7 @@ void CAN_Parser::Parser()
         {
             PUTM_CAN::TC_imu_acc tc_imu_acc;
             memcpy(&tc_imu_acc, &frtmp.data, sizeof(frtmp.data));
-            tc->Update_metrics(tc_imu_acc);
+            tc.Update_metrics(tc_imu_acc);
         }
         break;
 
@@ -192,7 +184,7 @@ void CAN_Parser::Parser()
         {
             PUTM_CAN::TC_imu_gyro tc_imu_gyro;
             memcpy(&tc_imu_gyro, &frtmp.data, sizeof(frtmp.data));
-            tc->Update_metrics(tc_imu_gyro);
+            tc.Update_metrics(tc_imu_gyro);
         }
         break;
 
@@ -201,7 +193,7 @@ void CAN_Parser::Parser()
         {
             PUTM_CAN::TC_main tc_main;
             memcpy(&tc_main, &frtmp.data, sizeof(frtmp.data));
-            tc->Update_metrics(tc_main);
+            tc.Update_metrics(tc_main);
         }
         break;
 
@@ -210,7 +202,7 @@ void CAN_Parser::Parser()
         {
             PUTM_CAN::TC_rear_suspension tc_rear;
             memcpy(&tc_rear, &frtmp.data, sizeof(frtmp.data));
-            tc->Update_metrics(tc_rear);
+            tc.Update_metrics(tc_rear);
         }
         break;
 
@@ -219,7 +211,7 @@ void CAN_Parser::Parser()
         {
             PUTM_CAN::TC_temperatures tc_temperatures;
             memcpy(&tc_temperatures, &frtmp.data, sizeof(frtmp.data));
-            tc->Update_metrics(tc_temperatures);
+            tc.Update_metrics(tc_temperatures);
         }
         break;
 
@@ -228,7 +220,7 @@ void CAN_Parser::Parser()
         {
             PUTM_CAN::TC_wheel_velocities tc_wheels;
             memcpy(&tc_wheels, &frtmp.data, sizeof(frtmp.data));
-            tc->Update_metrics(tc_wheels);
+            tc.Update_metrics(tc_wheels);
         }
         break;
 
@@ -237,7 +229,7 @@ void CAN_Parser::Parser()
         {
             PUTM_CAN::WheelTemp_main wheel_tmp_main;
             memcpy(&wheel_tmp_main, &frtmp.data, sizeof(frtmp.data));
-            // tc->Update_metrics(wh);
+            // tc.Update_metrics(wh);
         }
         break;
 
@@ -246,7 +238,7 @@ void CAN_Parser::Parser()
         {
             PUTM_CAN::YawProbe_air_flow yawprobe;
             memcpy(&yawprobe, &frtmp.data, sizeof(frtmp.data));
-            // tc->Update_metrics(tc_wheels);
+            // tc.Update_metrics(tc_wheels);
         }
         break;
     }

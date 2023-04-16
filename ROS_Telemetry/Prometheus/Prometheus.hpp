@@ -289,6 +289,8 @@ class Traction_Control{
 
     AgentJson &device_logger     = {logger.registry.Add({{"Source", "PUTM_Telemetry"}, {"Device",device_name}})};
 
+    int current_state;
+
     std::string device_name = "Traction_Control";
 
 
