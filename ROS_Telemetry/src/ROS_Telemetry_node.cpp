@@ -25,7 +25,9 @@ int main(int argc, char *argv[])
 
     ros::init(argc, argv, "Telemetry");
 
-    Parser::Run();
+    //Parser::Run();
+
+    for(;;){}
 
     return 0;
 }

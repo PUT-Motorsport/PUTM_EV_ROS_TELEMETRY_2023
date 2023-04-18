@@ -58,16 +58,16 @@ find_package(Boost REQUIRED COMPONENTS system)
 ##   * uncomment the generate_messages entry below
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
-add_message_files(
-  DIRECTORY
-  msg
-  FILES
-  APPSKURWAKOZA.msg
-  BMSLV.msg
-  BMSHV.msg
-  AQ_CARD.msg
-  TC.msg
- )
+# add_message_files(
+#   DIRECTORY
+#   msg
+#   FILES
+#   APPSKURWAKOZA.msg
+#   BMSLV.msg
+#   BMSHV.msg
+#   AQ_CARD.msg
+#   TC.msg
+#  )
 
 ## Generate services in the 'srv' folder
 # add_service_files(

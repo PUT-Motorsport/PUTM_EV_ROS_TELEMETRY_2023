@@ -63,7 +63,7 @@ void Bms_Lv::Update_metrics(PUTM_CAN::BMS_LV_temperature bmslv_tmp_frame)
 
 void Bms_Hv::Update_metrics(PUTM_CAN::BMS_HV_main bmshv_main_frame)
 {
-    Voltage        .Set(bmshv_main_frame.voltage_sum);
+    Voltage        .Set(static_cast<float>(bmshv_main_frame.voltage_sum/100.0));
     Current        .Set(bmshv_main_frame.current);
     SoC            .Set(bmshv_main_frame.soc);
     Temperature_max.Set(bmshv_main_frame.temp_max);
@@ -152,7 +152,7 @@ void Traction_Control::Update_metrics(PUTM_CAN::TC_rear_suspension tc_rear_suspe
 
 void Traction_Control::Update_metrics(PUTM_CAN::TC_main tc_main_frame)
 {
-    vehicle_speed.Set(tc_main_frame.vehicle_speed);
+    vehicle_speed.Set(static_cast<float>(tc_main_frame.vehicle_speed/10.0));
     motor_current.Set(tc_main_frame.motor_current);
     motor_speed  .Set(tc_main_frame.engine_speed);
     tc_intensity .Set(tc_main_frame.traction_control_intensivity);
