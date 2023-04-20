@@ -1,3 +1,0 @@
-uint16 pedalPosition
-uint8 counter
-int8 difference

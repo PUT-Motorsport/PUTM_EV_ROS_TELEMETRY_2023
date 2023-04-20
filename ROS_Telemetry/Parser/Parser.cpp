@@ -194,6 +194,12 @@ void CAN_Parser::Parser()
             PUTM_CAN::TC_main tc_main;
             memcpy(&tc_main, &frtmp.data, sizeof(frtmp.data));
             tc->Update_metrics(tc_main);
+            if(tc_main.tractive_system_on == true)
+            {
+                int a = 10;            
+
+
+            }
         }
         break;
 
@@ -241,6 +247,11 @@ void CAN_Parser::Parser()
             // tc->Update_metrics(tc_wheels);
         }
         break;
+        case PUTM_CAN::STEERING_WHEEL_EVENT_CAN_ID:
+        {
+            PUTM_CAN::Steering_Wheel_event event;
+            int a = 10;
+        }
     }
     }
 }

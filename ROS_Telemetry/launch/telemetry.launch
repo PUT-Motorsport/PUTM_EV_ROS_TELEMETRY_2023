@@ -1,3 +1,4 @@
 <launch>
   <node name="ROS_Telemetry_node" pkg="ROS_Telemetry" type="ROS_Telemetry_node" output="screen"/>
+  <node name="PUTM_EV_ROS2CAN_node" pkg="PUTM_EV_ROS2CAN" type="PUTM_EV_ROS2CAN_node" output="screen"/>
 </launch>

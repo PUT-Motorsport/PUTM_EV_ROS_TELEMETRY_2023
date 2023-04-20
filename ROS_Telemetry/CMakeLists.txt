@@ -19,8 +19,6 @@ add_compile_options(-gdwarf-4 -g)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   std_msgs
-  message_generation
-  genmsg
 )
 
 find_package(Boost REQUIRED COMPONENTS system)
@@ -58,16 +56,16 @@ find_package(Boost REQUIRED COMPONENTS system)
 ##   * uncomment the generate_messages entry below
 ##   * add every package in MSG_DEP_SET to generate_messages(DEPENDENCIES ...)
 
-add_message_files(
-  DIRECTORY
-  msg
-  FILES
-  APPSKURWAKOZA.msg
-  BMSLV.msg
-  BMSHV.msg
-  AQ_CARD.msg
-  TC.msg
- )
+# add_message_files(
+#   DIRECTORY
+#   msg
+#   FILES
+#   APPSKURWAKOZA.msg
+#   BMSLV.msg
+#   BMSHV.msg
+#   AQ_CARD.msg
+#   TC.msg
+#  )
 
 ## Generate services in the 'srv' folder
 # add_service_files(
@@ -117,7 +115,7 @@ generate_messages(DEPENDENCIES std_msgs )
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES ROS_Telemetry
-   CATKIN_DEPENDS roscpp std_msgs message_runtime
+   CATKIN_DEPENDS roscpp std_msgs
 #  DEPENDS system_lib
 )
 
