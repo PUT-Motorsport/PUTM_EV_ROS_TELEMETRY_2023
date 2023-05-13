@@ -26,7 +26,6 @@ find_package(Boost REQUIRED COMPONENTS system)
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
-
 ## Uncomment this if the package has a setup.py. This macro ensures
 ## modules and global scripts declared therein get installed
 ## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
@@ -46,7 +45,7 @@ find_package(Boost REQUIRED COMPONENTS system)
 ##   * If MSG_DEP_SET isn't empty the following dependency has been pulled in
 ##     but can be declared for certainty nonetheless:
 ##     * add a exec_depend tag for "message_runtime"
-## * In this file (CMakeLists.txt):
+## * In this file (CMakeLists.txt):g++ main.cpp -lfmt -o main
 ##   * add "message_generation" and every package in MSG_DEP_SET to
 ##     find_package(catkin REQUIRED COMPONENTS ...)
 ##   * add "message_runtime" and every package in MSG_DEP_SET to
@@ -163,7 +162,8 @@ add_subdirectory(Loki)
 target_link_libraries(${PROJECT_NAME}_node PRIVATE ${catkin_LIBRARIES} "/prometheus-cpp/lib/libprometheus-cpp-pull.so.1.1.0")
 target_link_libraries(${PROJECT_NAME}_node PRIVATE ${catkin_LIBRARIES} "/prometheus-cpp/lib/libprometheus-cpp-core.so.1.1")
 
-target_link_libraries(${PROJECT_NAME}_node PRIVATE "/usr/local/lib/libloki-cpp.so.1")
+##target_link_libraries(${PROJECT_NAME}_node PRIVATE "/usr/local/lib/libloki-cpp.a")
+target_link_libraries(${PROJECT_NAME}_node PRIVATE "/usr/local/lib/libloki-cpp.so")
 target_link_libraries(${PROJECT_NAME}_node PRIVATE "/lib/x86_64-linux-gnu/libcurl.so.4")
 
 # FMT JEST ZE ŹRÓDŁA BO INACZEJ NIE DZIAŁA!!

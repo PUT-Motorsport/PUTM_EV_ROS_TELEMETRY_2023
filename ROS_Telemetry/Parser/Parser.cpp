@@ -1,5 +1,8 @@
 #include "Parser.hpp"
 #include "../Prometheus/Prometheus.hpp"
+#include <chrono>
+#include <thread>
+#include <iostream>
 
 Data::Apps *apps = new Data::Apps();
 Data::AQ_Card *aq = new Data::AQ_Card();
@@ -8,6 +11,7 @@ Data::Bms_Hv *hv = new Data::Bms_Hv();
 Data::Traction_Control *tc = new Data::Traction_Control();
 Data::Time *times = new Data::Time();
 Data::Fuse *fuse = new Data::Fuse();
+Data::WheelTemperatureSensor *wheeltmpSensor = new Data::WheelTemperatureSensor();
 
 namespace Parser{
 
@@ -20,6 +24,7 @@ void Run()
     {
         parsing_handler.Push();
         //std::cout << parsing_handler.frame_buffer.size() << std::endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
     }
 }
 
@@ -33,8 +38,10 @@ void CAN_Parser::Parser()
 {
     while(true)
     {
+    
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
         
-    while(frame_buffer.size() == 0);
+    while(frame_buffer.size() == 0) {}
     
     can_frame frtmp = Pop();
 
@@ -121,6 +128,7 @@ void CAN_Parser::Parser()
             PUTM_CAN::Lap_timer_Acc_time laptimeracc;
             memcpy(&laptimeracc, &frtmp.data, sizeof(frtmp.data));
             times->Update_metrics(laptimeracc);
+            ROS_INFO("Acceleration");
         }
         break;
 
@@ -235,7 +243,7 @@ void CAN_Parser::Parser()
         {
             PUTM_CAN::WheelTemp_main wheel_tmp_main;
             memcpy(&wheel_tmp_main, &frtmp.data, sizeof(frtmp.data));
-            // tc->Update_metrics(wh);
+            wheeltmpSensor->Update_metrics(wheel_tmp_main);
         }
         break;
 
