@@ -330,7 +330,10 @@ class Time{
         .Register(*registry_prometheus)};
 
     Counter &lap_Counter = {lap_counter.Add({{"Lap_Timer", "Lap number"}})};
+<<<<<<< HEAD
     Counter &acc_counter = {lap_counter.Add({{"Lap_Timer", "Acc number"}})};
+=======
+>>>>>>> eb2d080f82b3a1b016f55872a3a4c6bf8777e632
 
     public:
 

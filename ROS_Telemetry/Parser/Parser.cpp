@@ -23,6 +23,11 @@ void Run()
     while(true)
     {
         parsing_handler.Push();
+<<<<<<< HEAD
+=======
+        //std::cout << parsing_handler.frame_buffer.size() << std::endl;
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+>>>>>>> eb2d080f82b3a1b016f55872a3a4c6bf8777e632
     }
 }
 
@@ -36,11 +41,17 @@ void CAN_Parser::Parser()
 {
     while(true)
     {
+    
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
         
+<<<<<<< HEAD
     while(frame_buffer.size() == 0) 
     {
         std::this_thread::sleep_for(std::chrono::milliseconds(2));
     }
+=======
+    while(frame_buffer.size() == 0) {}
+>>>>>>> eb2d080f82b3a1b016f55872a3a4c6bf8777e632
     
     can_frame frtmp = Pop();
 
@@ -127,6 +138,7 @@ void CAN_Parser::Parser()
             PUTM_CAN::Lap_timer_Acc_time laptimeracc;
             memcpy(&laptimeracc, &frtmp.data, sizeof(frtmp.data));
             times->Update_metrics(laptimeracc);
+            ROS_INFO("Acceleration");
         }
         break;
 
