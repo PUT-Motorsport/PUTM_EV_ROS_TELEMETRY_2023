@@ -45,7 +45,7 @@ class Apps{
 
     std::string device_name = "Apps";
     AgentJson &device_logger = {logger.registry.Add({{"Source", "PUTM_Telemetry"}, {"Device",device_name}})};
-    int current_state;
+    int current_state = -1;
 
     std::vector<std::string> ok_states {
             "Normal Operation",
@@ -106,7 +106,7 @@ class Bms_Lv{
             "High Current",
             "Sleeping"};
 
-    int current_state;
+    int current_state = -1;
 
     void Update_metrics(PUTM_CAN::BMS_LV_main);
     void Update_metrics(PUTM_CAN::BMS_LV_temperature);
@@ -150,7 +150,7 @@ class Bms_Hv{
         "Temperature too high",
         "Current to high"
         };
-    int current_state;
+    int current_state = -1;
 
     void Update_metrics(PUTM_CAN::BMS_HV_main);
 };
@@ -232,7 +232,7 @@ class AQ_Card{
         "EBS"
         };
     
-    int current_state;
+    int current_state = -1;
 
     void Update_metrics(PUTM_CAN::AQ_acceleration);
     void Update_metrics(PUTM_CAN::AQ_gyroscope);
@@ -289,6 +289,8 @@ class Traction_Control{
             "APPS Skip Frame",
             "Inverter Timeout",
             "Inverter IPEAK"};
+
+    int current_state = -1;
     
     void Update_metrics(PUTM_CAN::TC_imu_acc);
     void Update_metrics(PUTM_CAN::TC_imu_gyro);
@@ -315,18 +317,27 @@ class Time{
             .Help("--")
             .Register(*registry_prometheus)};
 
-    Gauge& Acc_time =     {Times.Add({})};
-    Gauge& Skidpad_time = {Times.Add({})};
-    Gauge& Lap_Time =     {Times.Add({})};
-    Gauge& S1 =           {Times.Add({})};
-    Gauge& S2 =           {Times.Add({})};
-    Gauge& S3 =           {Times.Add({})};
+    Gauge& Acc_time =     {Times.Add({{"Lap_Timer", "Acceleration time"}})};
+    Gauge& Skidpad_time = {Times.Add({{"Lap_Timer", "Skidpad time"}})};
+    Gauge& Lap_Time =     {Times.Add({{"Lap_Timer", "Lap time"}})};
+    Gauge& S1 =           {Times.Add({{"Lap_Timer", "Sector 1 time"}})};
+    Gauge& S2 =           {Times.Add({{"Lap_Timer", "Sector 2 time"}})};
+    Gauge& S3 =           {Times.Add({{"Lap_Timer", "Sector 3 time"}})};
+
+    Family<Counter>& lap_counter = {BuildCounter()
+        .Name("lap_time_counter")
+        .Help("--")
+        .Register(*registry_prometheus)};
+
+    Counter &lap_Counter = {lap_counter.Add({{"Lap_Timer", "Lap number"}})};
+    Counter &acc_counter = {lap_counter.Add({{"Lap_Timer", "Acc number"}})};
 
     public:
 
     std::string device_name = "Lap_Timer";
     AgentJson &device_logger = {logger.registry.Add({{"Source", "PUTM_Telemetry"}, {"Device",device_name}})};
-    int current_state;
+
+    int current_state = -1;
 
     std::vector<std::string> ok_states {
         "Normal Operation",
@@ -362,7 +373,43 @@ class Time{
     void Update_metrics(PUTM_CAN::Lap_timer_Sector);
 };
 
+
+class WheelTemperatureSensor{
+    private:
+    Family<Gauge>& WheelTemperatureSensorData = {BuildGauge()
+            .Name("WheelTemps")
+            .Help("--")
+            .Register(*registry_prometheus)};
+
+    Gauge& wheelTemp0 =     {WheelTemperatureSensorData.Add({{"Wheel_Temperature_Sensor", "Pixel 1"}})};
+    Gauge& wheelTemp1 =     {WheelTemperatureSensorData.Add({{"Wheel_Temperature_Sensor", "Pixel 2"}})};
+    Gauge& wheelTemp2 =     {WheelTemperatureSensorData.Add({{"Wheel_Temperature_Sensor", "Pixel 3"}})};
+    Gauge& wheelTemp3 =     {WheelTemperatureSensorData.Add({{"Wheel_Temperature_Sensor", "Pixel 4"}})};
+    Gauge& wheelTemp4 =     {WheelTemperatureSensorData.Add({{"Wheel_Temperature_Sensor", "Pixel 5"}})};
+    Gauge& wheelTemp5 =     {WheelTemperatureSensorData.Add({{"Wheel_Temperature_Sensor", "Pixel 6"}})};
+    Gauge& wheelTemp6 =     {WheelTemperatureSensorData.Add({{"Wheel_Temperature_Sensor", "Pixel 7"}})};
+    Gauge& wheelTemp7 =     {WheelTemperatureSensorData.Add({{"Wheel_Temperature_Sensor", "Pixel 8"}})};
+
+
+    public:
+
+    std::string device_name = "Wheel Temperature Sensor";
+    AgentJson &device_logger = {logger.registry.Add({{"Source", "PUTM_Telemetry"}, {"Device",device_name}})};
+    int current_state = -1;
+
+    std::vector<std::string> ok_states {
+        };
+
+    std::vector<std::string> warning_states {
+    };
+    std::vector<std::string> error_states {
+        "Error"};
+
+    void Update_metrics(PUTM_CAN::WheelTemp_main);
+};
+
 }
+ 
 
 template<typename T>
 void Check_SC(T *SC, uint8_t new_s)

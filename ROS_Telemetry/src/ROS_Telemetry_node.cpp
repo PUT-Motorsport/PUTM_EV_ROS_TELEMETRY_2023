@@ -21,7 +21,7 @@ int main(int argc, char *argv[])
 
     ROS_INFO("Prometheus Online.");
 
-    std::thread Read(Read_Terminal_async);
+    //std::thread Read(Read_Terminal_async);
  
     logger.Push_Info(&logger.Telemetry_logger, "Telemetry", "Telemetry online!");
 
