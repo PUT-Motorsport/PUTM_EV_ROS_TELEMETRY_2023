@@ -74,18 +74,10 @@ void Bms_Hv::Update_metrics(PUTM_CAN::BMS_HV_main bmshv_main_frame)
 
 void Time::Update_metrics(PUTM_CAN::Lap_timer_Acc_time laptimer_acc_frame)
 {
-<<<<<<< HEAD
-    Acc_time.Set(static_cast<float>(laptimer_acc_frame.Acc_Time/1000.0));
-    acc_counter.Increment();
-    // uint8_t seconds  = (laptimer_acc_frame.Acc_Time/1000);
-    // uint32_t miliseconds = laptimer_acc_frame.Acc_Time - seconds*1000;
-    std::string message = "Acc time: " + std::to_string(static_cast<float>(laptimer_acc_frame.Acc_Time/1000.0)) + "s";
-=======
     Acc_time.Set(static_cast<float>(laptimer_acc_frame.Acc_Time/1000));
     uint8_t seconds  = (laptimer_acc_frame.Acc_Time/1000);
     uint32_t miliseconds = laptimer_acc_frame.Acc_Time - seconds*1000;
     std::string message = "Lap time: " + std::to_string(seconds) + ":" + std::to_string(miliseconds);
->>>>>>> eb2d080f82b3a1b016f55872a3a4c6bf8777e632
     logger.Push_Debug(&this->device_logger, device_name, message);
     Update_State(this, uint8_t(laptimer_acc_frame.device_state));
 }
