@@ -8,9 +8,10 @@ add_compile_options(-DCMAKE_BUILD_TYPE=debug)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread")
+SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -pthread") 
+set(CMAKE_CXX_FLAGS "-L/usr/lib/x86_64-linux-gnu")
 
-add_compile_options(-gdwarf-4 -g)
+add_compile_options(-gdwarf-4 -g -lfmt)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -82,13 +83,6 @@ find_package(Boost REQUIRED COMPONENTS system)
 
 generate_messages(DEPENDENCIES std_msgs )
 
-################################################
-## Declare ROS dynamic reconfigure parameters ##
-################################################
-
-## To declare and build dynamic reconfigure parameters within this
-## package, follow these steps:
-## * In the file package.xml:
 ##   * add a build_depend and a exec_depend tag for "dynamic_reconfigure"
 ## * In this file (CMakeLists.txt):
 ##   * add "dynamic_reconfigure" to
@@ -168,7 +162,6 @@ target_link_libraries(${PROJECT_NAME}_node PRIVATE "/lib/x86_64-linux-gnu/libcur
 
 # FMT JEST ZE ŹRÓDŁA BO INACZEJ NIE DZIAŁA!!
 target_link_libraries(${PROJECT_NAME}_node PRIVATE "/usr/local/lib/libfmt.a")
-
 target_compile_features(${PROJECT_NAME}_node PRIVATE cxx_std_17)
 ## Install ##
 #############

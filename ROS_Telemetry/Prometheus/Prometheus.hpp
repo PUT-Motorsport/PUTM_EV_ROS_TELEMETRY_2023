@@ -18,7 +18,7 @@
 #include "prometheus/registry.h"
 #include "../Loki/Loki.hpp"
 
-#include "../PUTM_DV_CAN_LIBRARY/Inc/putm_can_interface.hpp"
+#include "../PUTM_DV_CAN_LIBRARY_MULTIPLE_SOCKETS/include/can_rx.hpp"
 
 using namespace prometheus;
 
@@ -330,10 +330,6 @@ class Time{
         .Register(*registry_prometheus)};
 
     Counter &lap_Counter = {lap_counter.Add({{"Lap_Timer", "Lap number"}})};
-<<<<<<< HEAD
-    Counter &acc_counter = {lap_counter.Add({{"Lap_Timer", "Acc number"}})};
-=======
->>>>>>> eb2d080f82b3a1b016f55872a3a4c6bf8777e632
 
     public:
 
